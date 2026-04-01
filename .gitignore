@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv
+
+# ChromaDB
+chroma_db/
+
+# Virtual Environment
+.venv/
+env/
+venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+.gemini/
+.skills/
+.agents/
+.agent/
+_agents/
+_agent/
+
+# System
+Thumbs.db
+Desktop.ini
+
+# RAGgedy specific
+data/passages/*.pdf
+data/passages/*.txt
+!data/passages/README.md
+# We generally want to include the synthetic data for learners, 
+# but if it's too large we ignore it.
+# The PRD says it's 50-100 passages, which is small (~100KB).
+# So I'll keep them included for now.

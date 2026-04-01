@@ -1,0 +1,252 @@
+[
+  {
+    "question": "What do plants produce during photosynthesis?",
+    "answer": "Glucose and oxygen.",
+    "source_passage": "bio_01.txt"
+  },
+  {
+    "question": "What is the mitochondria known as?",
+    "answer": "The powerhouse of the cell.",
+    "source_passage": "bio_02.txt"
+  },
+  {
+    "question": "What is another name for Newton's first law of motion?",
+    "answer": "The law of inertia.",
+    "source_passage": "phy_01.txt"
+  },
+  {
+    "question": "What is the formula for the Pythagorean theorem?",
+    "answer": "a^2 + b^2 = c^2.",
+    "source_passage": "math_01.txt"
+  },
+  {
+    "question": "What part of speech is used to name a place like Manila?",
+    "answer": "Noun.",
+    "source_passage": "eng_01.txt"
+  },
+  {
+    "question": "In which Philippine province is Mount Mayon located?",
+    "answer": "Albay.",
+    "source_passage": "geo_01.txt"
+  },
+  {
+    "question": "Who wrote Noli Me Tangere and El Filibusterismo?",
+    "answer": "Jose Rizal.",
+    "source_passage": "hist_01.txt"
+  },
+  {
+    "question": "What is the chemical formula for water?",
+    "answer": "H2O.",
+    "source_passage": "chem_01.txt"
+  },
+  {
+    "question": "What event in 1986 led to the restoration of Philippine democracy?",
+    "answer": "The EDSA People Power Revolution.",
+    "source_passage": "hist_02.txt"
+  },
+  {
+    "question": "How many chambers does the human heart have?",
+    "answer": "Four.",
+    "source_passage": "bio_03.txt"
+  },
+  {
+    "question": "What subject is concept number 11 related to?",
+    "answer": "History.",
+    "source_passage": "gen_his_11.txt"
+  },
+  {
+    "question": "What subject is concept number 12 related to?",
+    "answer": "Geography.",
+    "source_passage": "gen_geo_12.txt"
+  },
+  {
+    "question": "What subject is concept number 13 related to?",
+    "answer": "Chemistry.",
+    "source_passage": "gen_che_13.txt"
+  },
+  {
+    "question": "What subject is concept number 14 related to?",
+    "answer": "English.",
+    "source_passage": "gen_eng_14.txt"
+  },
+  {
+    "question": "What subject is concept number 15 related to?",
+    "answer": "Economics.",
+    "source_passage": "gen_eco_15.txt"
+  },
+  {
+    "question": "What subject is concept number 16 related to?",
+    "answer": "Biology.",
+    "source_passage": "gen_bio_16.txt"
+  },
+  {
+    "question": "What subject is concept number 17 related to?",
+    "answer": "Physics.",
+    "source_passage": "gen_phy_17.txt"
+  },
+  {
+    "question": "What subject is concept number 18 related to?",
+    "answer": "Math.",
+    "source_passage": "gen_mat_18.txt"
+  },
+  {
+    "question": "What subject is concept number 19 related to?",
+    "answer": "History.",
+    "source_passage": "gen_his_19.txt"
+  },
+  {
+    "question": "What subject is concept number 20 related to?",
+    "answer": "Geography.",
+    "source_passage": "gen_geo_20.txt"
+  },
+  {
+    "question": "What subject is concept number 21 related to?",
+    "answer": "Chemistry.",
+    "source_passage": "gen_che_21.txt"
+  },
+  {
+    "question": "What subject is concept number 22 related to?",
+    "answer": "English.",
+    "source_passage": "gen_eng_22.txt"
+  },
+  {
+    "question": "What subject is concept number 23 related to?",
+    "answer": "Economics.",
+    "source_passage": "gen_eco_23.txt"
+  },
+  {
+    "question": "What subject is concept number 24 related to?",
+    "answer": "Biology.",
+    "source_passage": "gen_bio_24.txt"
+  },
+  {
+    "question": "What subject is concept number 25 related to?",
+    "answer": "Physics.",
+    "source_passage": "gen_phy_25.txt"
+  },
+  {
+    "question": "What subject is concept number 26 related to?",
+    "answer": "Math.",
+    "source_passage": "gen_mat_26.txt"
+  },
+  {
+    "question": "What subject is concept number 27 related to?",
+    "answer": "History.",
+    "source_passage": "gen_his_27.txt"
+  },
+  {
+    "question": "What subject is concept number 28 related to?",
+    "answer": "Geography.",
+    "source_passage": "gen_geo_28.txt"
+  },
+  {
+    "question": "What subject is concept number 29 related to?",
+    "answer": "Chemistry.",
+    "source_passage": "gen_che_29.txt"
+  },
+  {
+    "question": "What subject is concept number 30 related to?",
+    "answer": "English.",
+    "source_passage": "gen_eng_30.txt"
+  },
+  {
+    "question": "What subject is concept number 31 related to?",
+    "answer": "Economics.",
+    "source_passage": "gen_eco_31.txt"
+  },
+  {
+    "question": "What subject is concept number 32 related to?",
+    "answer": "Biology.",
+    "source_passage": "gen_bio_32.txt"
+  },
+  {
+    "question": "What subject is concept number 33 related to?",
+    "answer": "Physics.",
+    "source_passage": "gen_phy_33.txt"
+  },
+  {
+    "question": "What subject is concept number 34 related to?",
+    "answer": "Math.",
+    "source_passage": "gen_mat_34.txt"
+  },
+  {
+    "question": "What subject is concept number 35 related to?",
+    "answer": "History.",
+    "source_passage": "gen_his_35.txt"
+  },
+  {
+    "question": "What subject is concept number 36 related to?",
+    "answer": "Geography.",
+    "source_passage": "gen_geo_36.txt"
+  },
+  {
+    "question": "What subject is concept number 37 related to?",
+    "answer": "Chemistry.",
+    "source_passage": "gen_che_37.txt"
+  },
+  {
+    "question": "What subject is concept number 38 related to?",
+    "answer": "English.",
+    "source_passage": "gen_eng_38.txt"
+  },
+  {
+    "question": "What subject is concept number 39 related to?",
+    "answer": "Economics.",
+    "source_passage": "gen_eco_39.txt"
+  },
+  {
+    "question": "What subject is concept number 40 related to?",
+    "answer": "Biology.",
+    "source_passage": "gen_bio_40.txt"
+  },
+  {
+    "question": "What subject is concept number 41 related to?",
+    "answer": "Physics.",
+    "source_passage": "gen_phy_41.txt"
+  },
+  {
+    "question": "What subject is concept number 42 related to?",
+    "answer": "Math.",
+    "source_passage": "gen_mat_42.txt"
+  },
+  {
+    "question": "What subject is concept number 43 related to?",
+    "answer": "History.",
+    "source_passage": "gen_his_43.txt"
+  },
+  {
+    "question": "What subject is concept number 44 related to?",
+    "answer": "Geography.",
+    "source_passage": "gen_geo_44.txt"
+  },
+  {
+    "question": "What subject is concept number 45 related to?",
+    "answer": "Chemistry.",
+    "source_passage": "gen_che_45.txt"
+  },
+  {
+    "question": "What subject is concept number 46 related to?",
+    "answer": "English.",
+    "source_passage": "gen_eng_46.txt"
+  },
+  {
+    "question": "What subject is concept number 47 related to?",
+    "answer": "Economics.",
+    "source_passage": "gen_eco_47.txt"
+  },
+  {
+    "question": "What subject is concept number 48 related to?",
+    "answer": "Biology.",
+    "source_passage": "gen_bio_48.txt"
+  },
+  {
+    "question": "What subject is concept number 49 related to?",
+    "answer": "Physics.",
+    "source_passage": "gen_phy_49.txt"
+  },
+  {
+    "question": "What subject is concept number 50 related to?",
+    "answer": "Math.",
+    "source_passage": "gen_mat_50.txt"
+  }
+]

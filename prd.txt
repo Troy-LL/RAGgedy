@@ -1,0 +1,719 @@
+RAGgedy
+
+Open-Source RAG Templates
+
+Product Requirements Document
+
+01_Naive_RAG · Edu-Scholar Pipeline · v1.0
+
+Document Type
+
+Product Requirements Document (PRD)
+
+Module
+
+01_Naive_RAG
+
+Pipeline
+
+Edu-Scholar
+
+Version
+
+1.0 — Initial Draft
+
+Status
+
+In Progress
+
+Owner
+
+RAGgedy Core Contributors
+
+Last Updated
+
+April 2026
+
+1. Overview
+
+1.1 Purpose
+
+This document defines the product requirements for the 01_Naive_RAG module of the RAGgedy open-source repository. It covers the Edu-Scholar pipeline — a production-ready Retrieval-Augmented Generation system designed for educational content, with a primary focus on College Entrance Test (CET) preparation and local skills training materials.
+
+This module serves a dual purpose: it is both a functional pipeline that developers can drop into their own projects, and a guided learning environment for developers who want to understand how RAG systems work from first principles.
+
+1.2 Background
+
+Most open-source RAG repositories provide a single monolithic example that assumes the developer already has their own data and understands the underlying architecture. RAGgedy takes a different approach: it provides a “Lego kit” of modular, clearly structured templates ordered by architectural complexity, each bundled with datasets and evaluation tooling.
+
+The 01_Naive_RAG module is the entry point — the simplest possible RAG pipeline that still demonstrates every core concept. It is intentionally incomplete so that learners can see exactly what breaks when they push it harder, motivating the need for the techniques introduced in 02_Advanced_RAG.
+
+1.3 Scope
+
+This PRD covers the following:
+
+Folder structure and file responsibilities for 01_Naive_RAG
+
+Technology stack and dependency requirements
+
+The Edu-Scholar starter dataset specification
+
+The ingestion pipeline (ingest.py)
+
+The query pipeline (query.py)
+
+Configuration management (config.py)
+
+Evaluation setup using Ragas
+
+The guided learning notebook
+
+The following are explicitly out of scope for this module:
+
+Hybrid search / BM25 retrieval (covered in 02_Advanced_RAG)
+
+Cross-encoder reranking (covered in 02_Advanced_RAG)
+
+Agentic workflows (covered in 03_Agentic_RAG)
+
+Geographic / spatial indexing (covered in 04_Geo_RAG)
+
+2. Goals & Non-Goals
+
+2.1 Goals
+
+Provide a fully working, locally-runnable RAG pipeline with zero proprietary API dependencies.
+
+Give learners a concrete starting point with bundled sample data so they can run the pipeline within minutes of cloning the repo.
+
+Make every architectural decision visible and explainable — configuration is centralized, pipeline stages are separated into distinct scripts, and every component has a documented reason for existing.
+
+Establish a Ragas baseline score that subsequent modules (02, 03, 04) can demonstrably improve upon.
+
+Include an intentionally degraded “broken” variant that shows learners what happens when chunking and retrieval are done poorly.
+
+2.2 Non-Goals
+
+This module does not aim to achieve state-of-the-art retrieval performance. It is a teaching tool, not a production-optimized system.
+
+This module does not support cloud-hosted models or paid embedding APIs. The entire stack must run locally via Ollama and Hugging Face.
+
+This module does not include a web interface or REST API. Interaction is via CLI and Jupyter notebooks only.
+
+3. Target Users
+
+RAGgedy serves three overlapping audiences:
+
+User Type
+
+Profile
+
+Primary Need
+
+Learner
+
+CS student, bootcamp grad, self-taught developer new to LLMs
+
+Understand how RAG works by running and modifying a real pipeline
+
+Builder
+
+Developer building an internal tool, study app, or document Q&A system
+
+A working, modifiable template they can adapt without starting from scratch
+
+Researcher
+
+ML practitioner benchmarking retrieval strategies
+
+Clean baseline metrics and reproducible evaluation tooling
+
+4. Technology Stack
+
+4.1 Core Dependencies
+
+Component
+
+Technology
+
+Language
+
+Python 3.12+
+
+Orchestration
+
+LlamaIndex (llama-index core + plugins)
+
+Local LLM
+
+Ollama — llama3 (default)
+
+Embedding model
+
+BAAI/bge-m3 via Hugging Face sentence-transformers
+
+Vector database
+
+ChromaDB (persistent local storage)
+
+Evaluation
+
+Ragas
+
+Development environment
+
+Cursor IDE (recommended)
+
+Notebook
+
+Jupyter / .ipynb
+
+4.2 Strict Constraints
+
+Open-Source Only
+
+The entire stack must be open-source and capable of running fully offline. No OpenAI, no Pinecone, no proprietary paid APIs of any kind. This is a hard constraint, not a preference.
+
+Additional constraints:
+
+All models must be pullable via Ollama or downloadable via Hugging Face without authentication.
+
+The pipeline must run on a developer laptop with 16GB RAM (no GPU required, though GPU acceleration via Ollama is supported if available).
+
+Dependency management is modular: each folder in RAGgedy maintains its own requirements.txt.
+
+5. System Architecture
+
+5.1 Pipeline Overview
+
+The Naive RAG pipeline consists of two distinct phases: an offline ingestion phase that builds the vector index, and an online query phase that retrieves context and generates answers.
+
+Pipeline Flow
+
+Document → Chunk (SentenceSplitter) → Embed (BAAI/bge-m3) → Store (ChromaDB) → Query → Retrieve (top-K cosine) → Prompt + Context → LLM (llama3) → Answer
+
+5.2 Folder Structure
+
+The following structure must be in place before any pipeline code is written:
+
+RAGgedy/
+
+└── 01_Naive_RAG/
+
+    ├── ingest.py          ← offline: load, chunk, embed, store
+
+    ├── query.py           ← online: retrieve + generate
+
+    ├── config.py          ← all settings in one place
+
+    ├── requirements.txt   ← pinned deps for this module
+
+    ├── README.md          ← pipeline diagram + usage
+
+    ├── data/
+
+    │   ├── passages/          ← source .txt / .pdf files
+
+    │   ├── questions.json     ← Q&A pairs for evaluation
+
+    │   └── README.md          ← dataset format docs
+
+    └── notebooks/
+
+        └── 01_walkthrough.ipynb  ← guided learning notebook
+
+5.3 Component Responsibilities
+
+File
+
+Responsibility
+
+Run frequency
+
+config.py
+
+Central configuration: paths, model names, chunk size, top-K
+
+Import-time only
+
+ingest.py
+
+Load documents, chunk, embed, persist to ChromaDB
+
+Once (or on data update)
+
+query.py
+
+Load index, embed query, retrieve, generate, print sources
+
+Every query
+
+evaluation/eval_naive.py
+
+Run Q&A pairs through pipeline, score with Ragas
+
+On demand / CI
+
+notebooks/01_walkthrough.ipynb
+
+Step-by-step guided tutorial with commentary
+
+By learners
+
+6. Functional Requirements
+
+6.1 Configuration (config.py)
+
+All tunable parameters must be defined in config.py and imported by other scripts. No hardcoded values are permitted in ingest.py or query.py.
+
+Parameter
+
+Default Value
+
+DATA_DIR
+
+data/
+
+CHROMA_DIR
+
+chroma_db/
+
+COLLECTION_NAME
+
+edu_scholar_naive
+
+EMBED_MODEL
+
+BAAI/bge-m3
+
+LLM_MODEL
+
+llama3
+
+LLM_BASE_URL
+
+http://localhost:11434
+
+CHUNK_SIZE
+
+512 tokens
+
+CHUNK_OVERLAP
+
+64 tokens
+
+TOP_K
+
+5
+
+6.2 Ingestion Pipeline (ingest.py)
+
+The ingestion script must perform the following operations in order:
+
+Load all documents from DATA_DIR using SimpleDirectoryReader (supports .txt and .pdf).
+
+Print the number of documents loaded.
+
+Chunk documents using SentenceSplitter with CHUNK_SIZE and CHUNK_OVERLAP from config.
+
+Print the number of chunks created.
+
+Load the embedding model specified by EMBED_MODEL. Model is downloaded on first run and cached.
+
+Create or connect to a persistent ChromaDB client at CHROMA_DIR.
+
+Get or create a collection named COLLECTION_NAME.
+
+Build and persist a VectorStoreIndex from the chunked nodes.
+
+Print a success message and instructions to run query.py.
+
+6.3 Query Pipeline (query.py)
+
+The query script must perform the following operations:
+
+Load the embedding model and LLM from config settings.
+
+Connect to the existing ChromaDB index (must fail gracefully if ingest.py has not been run).
+
+Expose an interactive CLI loop that accepts user questions.
+
+For each question: embed the query, retrieve the top-K chunks, construct a prompt with the retrieved context, generate a response using Ollama.
+
+Print the answer followed by the source file names and similarity scores for each retrieved chunk.
+
+Exit cleanly on 'quit' or 'exit' input.
+
+6.4 Evaluation (evaluation/eval_naive.py)
+
+The evaluation script must:
+
+Load questions.json from the data directory.
+
+Run each question through the query engine and collect: the generated answer, the retrieved context chunks, and the ground-truth answer.
+
+Evaluate using Ragas with at minimum the following metrics: context_precision and faithfulness.
+
+Print a summary table of scores.
+
+Optionally export results to a JSON file for comparison across module versions.
+
+7. Edu-Scholar Starter Dataset
+
+7.1 Purpose
+
+The bundled dataset exists so that learners can run the pipeline immediately after cloning the repository, without needing to source their own documents. It is intentionally small, clean, and purpose-built to demonstrate the pipeline's behavior clearly.
+
+7.2 Passage Bank
+
+Property
+
+Specification
+
+Format
+
+Plain text (.txt), one passage per file
+
+Count
+
+50–100 passages
+
+Subjects
+
+Biology, Physics, Mathematics, English Language
+
+Length per passage
+
+150–400 words
+
+Style
+
+CET-style explanatory passages (factual, clear, self-contained)
+
+Language
+
+English (Filipino-context examples where relevant)
+
+7.3 Q&A Pairs (questions.json)
+
+Each entry in questions.json maps a question to a ground-truth answer and the source passage it is answerable from. This structure feeds directly into the Ragas evaluation script.
+
+[
+
+  {
+
+    "question": "What is the primary function of mitochondria?",
+
+    "answer": "To produce ATP through cellular respiration.",
+
+    "source_passage": "biology_cell_01.txt"
+
+  },
+
+  {
+
+    "question": "What does Newton's second law state?",
+
+    "answer": "Force equals mass times acceleration (F = ma).",
+
+    "source_passage": "physics_motion_02.txt"
+
+  }
+
+]
+
+Property
+
+Specification
+
+Total Q&A pairs
+
+50 minimum
+
+Distribution
+
+~12–15 per subject area
+
+Answer style
+
+Concise factual statements (1–2 sentences)
+
+Difficulty
+
+Mixed (recall, comprehension, and simple inference)
+
+Dataset Design Note
+
+The dataset is synthetic but realistic. It is designed to produce mid-range Ragas scores on the naive pipeline (target: 0.55–0.70 faithfulness) — good enough to demonstrate the system works, but with clear room for improvement that the 02_Advanced_RAG module addresses.
+
+8. Learning Experience Requirements
+
+8.1 Guided Notebook (01_walkthrough.ipynb)
+
+The notebook is the primary learning artifact. It must walk through the entire pipeline step by step, with explanatory commentary at each stage. It is not a duplicate of the scripts — it is a narrated tour of what the scripts do and why.
+
+Required sections:
+
+Introduction: what is RAG and why does it exist?
+
+Configuration: load config.py and explain each parameter.
+
+Document loading: show a sample document and its metadata.
+
+Chunking: show before/after, print chunk sizes, visualize overlap.
+
+Embedding: show the shape of a chunk's embedding vector.
+
+Indexing: confirm ChromaDB collection was created.
+
+Querying: run 3 example questions, show retrieved chunks with scores.
+
+Evaluation: run Ragas and display scores.
+
+Next steps: explain what breaks and why, link to 02_Advanced_RAG.
+
+8.2 The Broken Variant
+
+A second script, ingest_broken.py, must be included. It uses intentionally degraded settings to produce poor retrieval performance. Learners run both, compare Ragas scores, and develop intuition about why each parameter matters.
+
+Parameter
+
+Broken Value (vs. Default)
+
+CHUNK_SIZE
+
+4096 (vs. 512) — chunks are too large to retrieve precisely
+
+CHUNK_OVERLAP
+
+0 (vs. 64) — context is lost at chunk boundaries
+
+TOP_K
+
+1 (vs. 5) — too few chunks retrieved to answer multi-part questions
+
+Learning Objective
+
+After running both variants and comparing Ragas scores, learners should be able to explain in their own words why chunk size, overlap, and top-K each affect retrieval quality. This prepares them to make informed architectural decisions in their own projects.
+
+9. Non-Functional Requirements
+
+9.1 Performance
+
+Ingestion of 100 passages must complete in under 5 minutes on a 2020-era laptop (Apple M1 or Intel i7 equivalent) without GPU.
+
+Query latency must be under 30 seconds per question on the same hardware (Ollama + llama3, CPU inference).
+
+Embedding model (BAAI/bge-m3) must be cached after first download; subsequent runs must not re-download.
+
+9.2 Reproducibility
+
+A single command (python ingest.py followed by python query.py) must be sufficient to run the full pipeline after cloning the repository and installing dependencies.
+
+All random seeds must be fixed where applicable to ensure consistent chunking and evaluation results across runs.
+
+requirements.txt must pin exact package versions.
+
+9.3 Readability
+
+All scripts must include inline comments explaining non-obvious decisions.
+
+Variable names must be descriptive. No single-letter variables outside of loop counters.
+
+Each file must begin with a docstring explaining its purpose, inputs, and outputs.
+
+10. Success Metrics
+
+10.1 Technical Acceptance Criteria
+
+Criterion
+
+Target
+
+Ragas faithfulness score (naive pipeline)
+
+≥ 0.55 on Edu-Scholar Q&A set
+
+Ragas context_precision score
+
+≥ 0.60 on Edu-Scholar Q&A set
+
+Ragas faithfulness score (broken variant)
+
+< 0.45 (demonstrably worse)
+
+Ingestion completion time (100 passages)
+
+< 5 minutes (CPU-only)
+
+Query response time
+
+< 30 seconds per question
+
+Cold-start setup time (clone to first query)
+
+< 15 minutes including model download
+
+10.2 Learning Experience Criteria
+
+A developer with no prior RAG experience should be able to run the full notebook and answer the following question correctly: “What is the effect of reducing chunk_size from 512 to 128 on retrieval precision?”
+
+The broken variant must produce Ragas scores at least 0.15 lower than the default variant to create a meaningful, visible contrast.
+
+Every section of the notebook must include at least one output cell that shows intermediate data (not just code).
+
+11. Milestones & Delivery Plan
+
+Milestone
+
+Deliverables
+
+Status
+
+M1: Scaffold
+
+Folder structure, config.py, requirements.txt, README skeleton
+
+Not started
+
+M2: Core pipeline
+
+ingest.py, query.py, working end-to-end locally
+
+Not started
+
+M3: Dataset
+
+50+ passages in data/, questions.json with 50 Q&A pairs
+
+Not started
+
+M4: Evaluation
+
+evaluation/eval_naive.py, baseline Ragas scores recorded
+
+Not started
+
+M5: Learning layer
+
+01_walkthrough.ipynb, ingest_broken.py, inline comments
+
+Not started
+
+M6: Documentation
+
+README.md with pipeline diagram, setup instructions, Ragas scores
+
+Not started
+
+12. Future Work & Next Module
+
+12.1 What 02_Advanced_RAG Will Add
+
+The limitations of the naive pipeline directly motivate the next module. The following gaps should be observable from 01_Naive_RAG's Ragas scores:
+
+Dense-only retrieval misses keyword-critical queries — 02 adds BM25 hybrid search.
+
+Top-K retrieval returns noisy chunks — 02 adds cross-encoder reranking to re-score and filter.
+
+No query transformation — 02 adds HyDE (Hypothetical Document Embeddings) for ambiguous questions.
+
+12.2 Dataset Expansion
+
+Add Filipino-language passages to stress-test bge-m3's multilingual capabilities.
+
+Add tabular data (CSV-formatted passages) to test chunking strategies for structured content.
+
+Add multi-document queries that require synthesizing information across multiple passages.
+
+12.3 MCP Compatibility
+
+Future iterations should structure the ingestion and query pipelines so that they can be exposed as MCP (Model Context Protocol) tools, enabling integration with Cursor IDE and other MCP-compatible clients. This is a design goal for v2.0 of the module, not a requirement for v1.0.
+
+Appendix A: Glossary
+
+Term
+
+Definition
+
+RAG
+
+Retrieval-Augmented Generation. A technique that grounds LLM outputs in retrieved documents to reduce hallucination.
+
+Chunk
+
+A fixed-size segment of a document, created by the SentenceSplitter. The unit of retrieval.
+
+Embedding
+
+A high-dimensional vector representation of a text chunk that captures its semantic meaning.
+
+ChromaDB
+
+An open-source vector database that stores embeddings and enables similarity search.
+
+Ollama
+
+A local LLM runtime that serves open-source models (llama3, mistral, etc.) via a REST API.
+
+bge-m3
+
+BAAI's BGE-M3 embedding model. Supports 100+ languages, 8192 token context. Runs locally.
+
+Ragas
+
+An open-source evaluation framework for RAG pipelines. Measures faithfulness, context precision, and more.
+
+Faithfulness
+
+Ragas metric: does the generated answer stay grounded in the retrieved context? (0–1)
+
+Context Precision
+
+Ragas metric: are the retrieved chunks relevant to the question? (0–1)
+
+CET
+
+College Entrance Test. A standardized exam used in the Philippines for university admission.
+
+MCP
+
+Model Context Protocol. An emerging standard for exposing tools and data sources to LLM clients.
+
+Appendix B: Quick Start Reference
+
+After cloning the repository and installing dependencies:
+
+# 1. Pull the required Ollama model
+
+ollama pull llama3
+
+ 
+
+# 2. Create and activate virtual environment
+
+python3.12 -m venv .venv && source .venv/bin/activate
+
+ 
+
+# 3. Install dependencies
+
+pip install -r 01_Naive_RAG/requirements.txt
+
+ 
+
+# 4. Run ingestion (builds the vector index)
+
+cd 01_Naive_RAG && python ingest.py
+
+ 
+
+# 5. Query the pipeline
+
+python query.py
+
+ 
+
+# 6. Run evaluation
+
+python evaluation/eval_naive.py
