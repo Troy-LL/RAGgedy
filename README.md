@@ -1,6 +1,6 @@
 # RAGgedy 🧩
 
-**RAGgedy** is an open-source educational repository of Retrieval-Augmented Generation (RAG) templates, designed as a modular "Lego kit" for developers. 
+**RAGgedy** is an open-source educational repository of Retrieval-Augmented Generation (RAG) templates, designed as a modular "Lego kit" for developers.
 
 Most RAG examples are monolithic. **RAGgedy** breaks the RAG pipeline into distinct, clear, and modular stages, starting from first principles and increasing in complexity across successive modules.
 
@@ -8,58 +8,89 @@ Most RAG examples are monolithic. **RAGgedy** breaks the RAG pipeline into disti
 
 ## 🏗️ Project Architecture
 
-RAGgedy is organized into numbered modules, each focusing on a specific architectural shift or technique.
+RAGgedy is organized into numbered modules, each focusing on a specific architectural shift or technique. Each module includes **good** vs **broken** ingestion variants, optional [Ragas](https://docs.ragas.io/en/stable/) evaluation, and a Jupyter walkthrough notebook.
 
-### 01_Naive_RAG (Current Module)
-- **Goal**: Build the simplest functional RAG pipeline with zero proprietary dependencies.
-- **Tech Stack**: [LlamaIndex](https://www.llamaindex.ai/), [Ollama](https://ollama.com/) (llama3), [BAAI/bge-m3](https://huggingface.co/BAAI/bge-m3) embeddings, [ChromaDB](https://www.trychroma.com/).
-- **Dataset**: *Edu-Scholar* — A purpose-built, synthetic student-tutor dataset for CET preparation.
+| Module | Focus | Highlights |
+|--------|--------|------------|
+| **01_Naive_RAG** | Baseline RAG | LlamaIndex, Ollama (llama3), [BAAI/bge-m3](https://huggingface.co/BAAI/bge-m3) embeddings, [ChromaDB](https://www.trychroma.com/), chunk → embed → retrieve → generate |
+| **02_Advanced_RAG** | Hybrid retrieval | Dense + [BM25](https://github.com/dorianbrown/rank_bm25) sparse indices, **Reciprocal Rank Fusion (RRF)**, **cross-encoder reranking** (`cross-encoder/ms-marco-MiniLM-L-12-v2`) |
+
+**Dataset**: *Edu-Scholar* — a synthetic student–tutor passage set for CET-style preparation (shared under each module’s `data/`).
+
+Module-specific commands, config tables, and architecture diagrams live in each folder’s `README.md` (e.g. [01_Naive_RAG/README.md](01_Naive_RAG/README.md), [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md)).
 
 ---
 
 ## 🚀 Quick Start
 
-Ensure you have [Ollama](https://ollama.com/) installed and running locally.
+Ensure [Ollama](https://ollama.com/) is installed and running locally.
 
-### 1. Pull the Model
+### 1. Pull the chat model
+
 ```bash
 ollama pull llama3
 ```
 
-### 2. Environment Setup
+### 2. Environment setup
+
 ```bash
-# Clone the repository
 git clone https://github.com/Troy-LL/RAGgedy.git
 cd RAGgedy
 
-# Create a virtual environment
 python -m venv .venv
-# Activate (Windows)
+# Windows
 .venv\Scripts\activate
-# Activate (Linux/Mac)
+# Linux / macOS
 source .venv/bin/activate
-
-# Install dependencies
-pip install -r 01_Naive_RAG/requirements.txt
 ```
 
-### 3. Run the Pipeline
+Install dependencies for the module you want to run (each module has its own `requirements.txt`):
+
+```bash
+pip install -r 01_Naive_RAG/requirements.txt
+# and/or
+pip install -r 02_Advanced_RAG/requirements.txt
+```
+
+### 3. Run a pipeline
+
+**Naive RAG (Module 01)**
+
 ```bash
 cd 01_Naive_RAG
-
-# Build the vector index
 python ingest.py
-
-# Query the pipeline
 python query.py
 ```
+
+**Advanced RAG (Module 02)**
+
+```bash
+cd 02_Advanced_RAG
+python ingest.py
+python query.py
+```
+
+### 4. Evaluation (optional)
+
+```bash
+# From 01_Naive_RAG
+python evaluation/eval_naive.py
+
+# From 02_Advanced_RAG
+python evaluation/eval_advanced.py
+```
+
+### 5. Notebooks
+
+- `01_Naive_RAG/notebooks/01_walkthrough.ipynb`
+- `02_Advanced_RAG/notebooks/02_walkthrough.ipynb`
 
 ---
 
 ## 🛠️ Module Roadmap
 
-- [x] **01_Naive_RAG**: The entry-point pipeline with Good/Broken variants.
-- [ ] **02_Advanced_RAG**: Hybrid search (BM25), reranking, and HyDE.
+- [x] **01_Naive_RAG**: Entry-point pipeline with good/broken variants.
+- [x] **02_Advanced_RAG**: Hybrid search (BM25 + dense), RRF fusion, cross-encoder reranking, good/broken variants.
 - [ ] **03_Agentic_RAG**: Self-correction, tool use, and multi-step reasoning.
 - [ ] **04_Geo_RAG**: Spatial-semantic indexing for geographic queries.
 
@@ -67,10 +98,13 @@ python query.py
 
 ## 🧪 Evaluation
 
-RAGgedy uses [Ragas](https://docs.ragas.io/en/stable/) for objective pipeline evaluation. We target `Faithfulness >= 0.55` and `Context Precision >= 0.60` for the naive baseline.
+RAGgedy uses [Ragas](https://docs.ragas.io/en/stable/) for pipeline evaluation. Reference targets (see each module’s `config` / docs):
+
+- **01_Naive_RAG**: Faithfulness ≥ 0.55, Context precision ≥ 0.60  
+- **02_Advanced_RAG**: Faithfulness ≥ 0.65, Context precision ≥ 0.72  
 
 ---
 
 ## ⚖️ License
 
-MIT License. See [LICENSE](LICENSE) for more details.
+MIT License. See [LICENSE](LICENSE) for details.
