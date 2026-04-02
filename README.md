@@ -59,7 +59,7 @@ python query.py
 ## 🛠️ Module Roadmap
 
 - [x] **01_Naive_RAG**: The entry-point pipeline with Good/Broken variants.
-- [ ] **02_Advanced_RAG**: Hybrid search (BM25), reranking, and HyDE.
+- [x] **02_Advanced_RAG**: Hybrid search (BM25), reranking, and HyDE.
 - [ ] **03_Agentic_RAG**: Self-correction, tool use, and multi-step reasoning.
 - [ ] **04_Geo_RAG**: Spatial-semantic indexing for geographic queries.
 
