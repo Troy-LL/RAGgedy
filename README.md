@@ -85,6 +85,16 @@ python evaluation/eval_advanced.py
 - `01_Naive_RAG/notebooks/01_walkthrough.ipynb`
 - `02_Advanced_RAG/notebooks/02_walkthrough.ipynb`
 
+### 6. Live visualization (optional)
+
+Install a module’s `requirements.txt`, then `pip install -r visualization/requirements.txt`. From the repo root:
+
+```bash
+streamlit run visualization/app.py
+```
+
+The app streams **ingestion** output in real time and shows **query** stages (dense retrieval; for module 02 also BM25, RRF, rerank). See [visualization/README.md](visualization/README.md).
+
 ---
 
 ## 🛠️ Module Roadmap
