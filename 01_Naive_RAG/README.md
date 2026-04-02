@@ -45,7 +45,10 @@ All configurations are centralized in `config.py`.
 ## 🚀 How to Use
 
 ### 1. Ingestion
-Build your vector index by processing the *Edu-Scholar* dataset.
+Build your vector index by processing the active dataset (default: *Edu-Scholar* under `data/datasets/edu_scholar/`).
+
+To use another scenario, add `data/datasets/<your_id>/passages/` (and optional `questions.json`), then set `RAGGEDY_DATASET` before running scripts (see `data/README.md`).
+
 ```bash
 python ingest.py
 ```

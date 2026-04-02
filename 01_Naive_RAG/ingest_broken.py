@@ -7,7 +7,7 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 import config
 
 # Degraded Settings
-BROKEN_COLLECTION_NAME = "edu_scholar_broken"
+BROKEN_COLLECTION_NAME = f"{config.DATASET_ID}_broken"
 BROKEN_CHUNK_SIZE = 4096
 BROKEN_CHUNK_OVERLAP = 0
 

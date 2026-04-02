@@ -15,7 +15,7 @@ RAGgedy is organized into numbered modules, each focusing on a specific architec
 | **01_Naive_RAG** | Baseline RAG | LlamaIndex, Ollama (llama3), [BAAI/bge-m3](https://huggingface.co/BAAI/bge-m3) embeddings, [ChromaDB](https://www.trychroma.com/), chunk → embed → retrieve → generate |
 | **02_Advanced_RAG** | Hybrid retrieval | Dense + [BM25](https://github.com/dorianbrown/rank_bm25) sparse indices, **Reciprocal Rank Fusion (RRF)**, **cross-encoder reranking** (`cross-encoder/ms-marco-MiniLM-L-12-v2`) |
 
-**Dataset**: *Edu-Scholar* — a synthetic student–tutor passage set for CET-style preparation (shared under each module’s `data/`).
+**Datasets**: Each module keeps corpora under `data/datasets/<scenario>/` (default scenario **`edu_scholar`**: synthetic CET-style *Edu-Scholar* passages). Set environment variable **`RAGGEDY_DATASET`** to the scenario folder name to ingest and query a different corpus; indexes are stored per scenario under `.chroma/<scenario>/` (and `.bm25_index/<scenario>/` in module 02). See each module’s `data/README.md`.
 
 Module-specific commands, config tables, and architecture diagrams live in each folder’s `README.md` (e.g. [01_Naive_RAG/README.md](01_Naive_RAG/README.md), [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md)).
 

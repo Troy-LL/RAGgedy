@@ -50,6 +50,8 @@ Desktop.ini
 data/passages/*.pdf
 data/passages/*.txt
 !data/passages/README.md
+data/datasets/*/passages/*.pdf
+data/datasets/*/passages/*.txt
 # We generally want to include the synthetic data for learners, 
 # but if it's too large we ignore it.
 # The PRD says it's 50-100 passages, which is small (~100KB).

@@ -13,9 +13,9 @@ def main():
     
     cfg = config.CONFIG.copy()
     
-    # Degrade configuration
-    cfg["chroma_db_path"] = ".chroma_broken/"
-    cfg["bm25_index_path"] = ".bm25_broken/"
+    # Degrade configuration (separate broken stores per dataset scenario)
+    cfg["chroma_db_path"] = config.CONFIG["broken_chroma_db_path"]
+    cfg["bm25_index_path"] = config.CONFIG["broken_bm25_index_path"]
     cfg["chunk_size"] = 1024
     cfg["chunk_overlap"] = 0
     cfg["embedding_model"] = "all-MiniLM-L6-v2" # worse model

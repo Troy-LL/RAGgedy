@@ -1,14 +1,18 @@
 import os
 
-# Base Directories
+# Base directories
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, "data")
-PASSAGES_DIR = os.path.join(DATA_DIR, "passages")
-QUESTIONS_FILE = os.path.join(DATA_DIR, "questions.json")
-CHROMA_DIR = os.path.join(BASE_DIR, ".chroma")
+
+# Active dataset: folder name under data/datasets/<id>/
+DATASET_ID = (os.environ.get("RAGGEDY_DATASET", "edu_scholar") or "edu_scholar").strip()
+DATASET_DIR = os.path.join(DATA_DIR, "datasets", DATASET_ID)
+PASSAGES_DIR = os.path.join(DATASET_DIR, "passages")
+QUESTIONS_FILE = os.path.join(DATASET_DIR, "questions.json")
+CHROMA_DIR = os.path.join(BASE_DIR, ".chroma", DATASET_ID)
 
 # Vector DB Settings
-COLLECTION_NAME = "edu_scholar_naive"
+COLLECTION_NAME = f"{DATASET_ID}_naive"
 
 # Models
 # Embedding model used to convert text to high-dimensional vectors

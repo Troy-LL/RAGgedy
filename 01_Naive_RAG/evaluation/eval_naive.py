@@ -13,7 +13,7 @@ from llama_index.llms.ollama import Ollama as LlamaIndexOllama
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
-BROKEN_COLLECTION = "edu_scholar_broken"
+BROKEN_COLLECTION = f"{config.DATASET_ID}_broken"
 BROKEN_TOP_K = 1
 
 def mock_evaluate(collection_name, top_k):

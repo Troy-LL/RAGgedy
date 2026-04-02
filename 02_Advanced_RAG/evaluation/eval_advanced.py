@@ -12,9 +12,6 @@ from llama_index.llms.ollama import Ollama as LlamaIndexOllama
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
-BROKEN_DB_PATH = ".chroma_broken/"
-BROKEN_COLLECTION = "advanced_rag_collection_broken"
-
 def mock_evaluate(db_path, collection_name):
     """
     Ragas evaluations require heavy local LLM compute across many metrics.
@@ -67,7 +64,7 @@ def main():
     
     # 2. Evaluate Broken Variant
     print("\n--- Evaluating BROKEN Pipeline ---")
-    broken_scores = mock_evaluate(BROKEN_DB_PATH, BROKEN_COLLECTION)
+    broken_scores = mock_evaluate(cfg["broken_chroma_db_path"], "advanced_rag_collection_broken")
     
     # Print Results Summary
     print("\n" + "="*50)
