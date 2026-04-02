@@ -36,6 +36,7 @@ ENV/
 .idea/
 .gemini/
 .skills/
+.specs/
 .agents/
 .agent/
 _agents/
