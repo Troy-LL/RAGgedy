@@ -1,6 +1,10 @@
+import argparse
 import os
 import sys
 import pickle
+import time
+from pathlib import Path
+
 import chromadb
 from llama_index.core import VectorStoreIndex, StorageContext, Settings
 from llama_index.vector_stores.chroma import ChromaVectorStore
@@ -8,6 +12,12 @@ from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
 from llama_index.core.retrievers import VectorIndexRetriever
 from sentence_transformers import CrossEncoder
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from zero_barrier_runtime.src.core.visualization import render_text
 
 
 def rrf_fusion(semantic_nodes_with_scores, bm25_nodes_with_scores, k=60):
@@ -149,7 +159,59 @@ def run_hybrid_query(user_input, cfg, semantic_retriever, bm25, all_nodes, reran
     }
 
 
+def _format_advanced_text(question: str, out: dict, elapsed_ms: float) -> str:
+    lines = ["=" * 64, "02_Advanced_RAG Query", f"Question: {question}", "=" * 64, ""]
+    lines.append("Answer")
+    lines.append(out["answer"])
+    lines.append("")
+
+    lines.append("Final Reranked Sources")
+    for idx, row in enumerate(out["final"], 1):
+        lines.append(f"[{idx}] {row['filename']} | score={row['score']:.4f}")
+        lines.append(f"    {row['snippet']}")
+
+    lines.append("")
+    lines.append(
+        "Pipeline counts: "
+        f"semantic={len(out['semantic'])}, bm25={len(out['bm25'])}, "
+        f"fused={len(out['fused'])}, final={len(out['final'])}"
+    )
+    lines.append(f"Latency: {elapsed_ms:.2f} ms")
+    return "\n".join(lines)
+
+
+def _ask_once(
+    question: str,
+    visualize: str,
+    cfg,
+    semantic_retriever,
+    bm25,
+    all_nodes,
+    reranker,
+) -> None:
+    t0 = time.perf_counter()
+    out = run_hybrid_query(question, cfg, semantic_retriever, bm25, all_nodes, reranker)
+    elapsed_ms = (time.perf_counter() - t0) * 1000.0
+    text = _format_advanced_text(question, out, elapsed_ms)
+    render_text(
+        text,
+        visualize,
+        title="RAGgedy Advanced Query",
+        header=f"Question: {question}",
+    )
+
+
 def main():
+    parser = argparse.ArgumentParser(description="Query 02_Advanced_RAG")
+    parser.add_argument("--question", default=None, help="Run one question and exit")
+    parser.add_argument(
+        "--visualize",
+        choices=["auto", "popup", "terminal", "off"],
+        default="auto",
+        help="Display mode: auto popup, forced popup, terminal, or off",
+    )
+    args = parser.parse_args()
+
     print("Loading 02_Advanced_RAG Query Engine...")
     import config
 
@@ -164,6 +226,18 @@ def main():
     print("Type your questions below. Enter 'quit' or 'exit' to leave.")
     print("=" * 50)
 
+    if args.question:
+        _ask_once(
+            args.question.strip(),
+            args.visualize,
+            cfg,
+            semantic_retriever,
+            bm25,
+            all_nodes,
+            reranker,
+        )
+        return
+
     while True:
         try:
             user_input = input("\nQuery > ")
@@ -175,16 +249,15 @@ def main():
                 continue
 
             print("Thinking...")
-            out = run_hybrid_query(user_input, cfg, semantic_retriever, bm25, all_nodes, reranker)
-
-            print("\n" + "=" * 10 + " ANSWER " + "=" * 10)
-            print(out["answer"])
-
-            print("\n" + "=" * 10 + " SOURCES " + "=" * 9)
-            for idx, row in enumerate(out["final"], 1):
-                snip = row["snippet"].replace("\n", " ")
-                short = snip[:80] + "..." if len(snip) > 80 else snip
-                print(f"[{idx}] {row['filename']} (Score: {row['score']:.4f}) -> {short}")
+            _ask_once(
+                user_input,
+                args.visualize,
+                cfg,
+                semantic_retriever,
+                bm25,
+                all_nodes,
+                reranker,
+            )
 
         except KeyboardInterrupt:
             print("\nGoodbye!")

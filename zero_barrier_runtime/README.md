@@ -5,6 +5,15 @@ Runnable three-tier runtime scaffold:
 - Tier 2: API mode (Groq/Together/Hugging Face)
 - Tier 3: Local mode (Ollama)
 
+You can also run all project paths from one command at repo root:
+
+```bash
+python run.py --path mock --show-trace
+python run.py --path demo
+python run.py --path naive --dataset edu_scholar
+python run.py --path advanced --dataset edu_scholar
+```
+
 ## Run
 
 From repository root:
@@ -12,6 +21,8 @@ From repository root:
 ```bash
 python -m zero_barrier_runtime.app --mode mock --question "Why does retrieval matter?" --show-trace
 ```
+
+By default, the runtime uses native popup visualization (no localhost). Use `--visualize terminal` for console-only output.
 
 ### API mode
 
@@ -34,3 +45,10 @@ python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --ques
 ```bash
 python -m zero_barrier_runtime.scripts.mock_trace_demo
 ```
+
+Visualization flags supported by runtime and demo:
+
+- `--visualize auto` popup with terminal fallback (default)
+- `--visualize popup` force popup
+- `--visualize terminal` print only
+- `--visualize off` no rendering output

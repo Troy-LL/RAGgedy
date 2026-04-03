@@ -1,10 +1,20 @@
+import argparse
 import os
 import sys
+import time
+from pathlib import Path
+
 import chromadb
 from llama_index.core import VectorStoreIndex, StorageContext, Settings
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from zero_barrier_runtime.src.core.visualization import render_text
 
 
 def load_naive_query_engine(config_mod=None):
@@ -46,7 +56,44 @@ def run_naive_query(query_engine, user_input):
     return {"answer": str(response).strip(), "sources": sources}
 
 
+def _format_naive_text(question: str, out: dict, elapsed_ms: float) -> str:
+    lines = ["=" * 64, "01_Naive_RAG Query", f"Question: {question}", "=" * 64, ""]
+    lines.append("Answer")
+    lines.append(out["answer"])
+    lines.append("")
+    lines.append("Sources")
+    for idx, row in enumerate(out["sources"], 1):
+        lines.append(f"[{idx}] {row['filename']} | score={row['score']:.4f}")
+        lines.append(f"    {row['snippet']}")
+    lines.append("")
+    lines.append(f"Latency: {elapsed_ms:.2f} ms")
+    return "\n".join(lines)
+
+
+def _ask_once(query_engine, question: str, visualize: str) -> None:
+    t0 = time.perf_counter()
+    out = run_naive_query(query_engine, question)
+    elapsed_ms = (time.perf_counter() - t0) * 1000.0
+    text = _format_naive_text(question, out, elapsed_ms)
+    render_text(
+        text,
+        visualize,
+        title="RAGgedy Naive Query",
+        header=f"Question: {question}",
+    )
+
+
 def main():
+    parser = argparse.ArgumentParser(description="Query 01_Naive_RAG")
+    parser.add_argument("--question", default=None, help="Run one question and exit")
+    parser.add_argument(
+        "--visualize",
+        choices=["auto", "popup", "terminal", "off"],
+        default="auto",
+        help="Display mode: auto popup, forced popup, terminal, or off",
+    )
+    args = parser.parse_args()
+
     print("Loading 01_Naive_RAG Query Engine...")
     import config
 
@@ -61,6 +108,10 @@ def main():
     print("Type your questions below. Enter 'quit' or 'exit' to leave.")
     print("=" * 50)
 
+    if args.question:
+        _ask_once(query_engine, args.question.strip(), args.visualize)
+        return
+
     while True:
         try:
             user_input = input("\nQuery > ")
@@ -72,16 +123,7 @@ def main():
                 continue
 
             print("Thinking...")
-            out = run_naive_query(query_engine, user_input)
-
-            print("\n" + "=" * 10 + " ANSWER " + "=" * 10)
-            print(out["answer"])
-
-            print("\n" + "=" * 10 + " SOURCES " + "=" * 9)
-            for idx, s in enumerate(out["sources"], 1):
-                snip = s["snippet"].replace("\n", " ")
-                short = snip[:80] + "..." if len(snip) > 80 else snip
-                print(f"[{idx}] {s['filename']} (Score: {s['score']:.4f}) -> {short}")
+            _ask_once(query_engine, user_input, args.visualize)
         except KeyboardInterrupt:
             print("\nGoodbye!")
             break

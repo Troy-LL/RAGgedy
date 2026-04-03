@@ -53,6 +53,18 @@ python ingest.py
 python query.py
 ```
 
+Native popup visualization is on by default (no localhost). You can also run one-shot mode:
+
+```bash
+python query.py --question "Why does chunking help?"
+```
+
+Visualization flags for query:
+
+- `--visualize auto` popup with terminal fallback (default)
+- `--visualize terminal` print only
+- `--visualize off` no rendering output
+
 2.5. Open visualization directly from this module (no separate setup page).
 
 ```bash

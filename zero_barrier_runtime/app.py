@@ -1,5 +1,6 @@
 from zero_barrier_runtime.src.config.mode_registry import build_orchestrator
 from zero_barrier_runtime.src.config.settings import build_parser
+from zero_barrier_runtime.src.core.visualization import try_show_popup
 
 
 def _print_result(bundle):
@@ -25,6 +26,24 @@ def _print_result(bundle):
     print(f"\nLatency: {bundle.metadata.get('latency_ms', '?')} ms")
 
 
+def _present_result(bundle, visualize_mode: str) -> None:
+    if visualize_mode == "off":
+        return
+
+    if visualize_mode == "terminal":
+        _print_result(bundle)
+        return
+
+    if visualize_mode in {"auto", "popup"}:
+        popup_ok = try_show_popup(bundle)
+        if popup_ok:
+            return
+        if visualize_mode == "popup":
+            print("Popup visualization unavailable on this environment; falling back to terminal output.")
+
+    _print_result(bundle)
+
+
 def main():
     parser = build_parser()
     args = parser.parse_args()
@@ -35,7 +54,7 @@ def main():
         top_k=args.top_k,
         include_trace=args.show_trace or args.mode == "mock",
     )
-    _print_result(bundle)
+    _present_result(bundle, args.visualize)
 
 
 if __name__ == "__main__":

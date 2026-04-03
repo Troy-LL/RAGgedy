@@ -71,6 +71,23 @@ pip install -r visualization/requirements.txt
 
 Pick the group that matches what you want to do.
 
+If you prefer one command for everything, use the project runner:
+
+```bash
+python run.py --path mock --show-trace
+python run.py --path demo
+python run.py --path naive --dataset edu_scholar
+python run.py --path advanced --dataset edu_scholar
+python run.py --path api --question "Explain vector embeddings like I am 5"
+python run.py --path local --question "How does retrieval improve answer quality?"
+```
+
+Runner flags work across paths:
+
+- `--visualize auto|popup|terminal|off`
+- `--question "..."`
+- `--dataset <id>` for module paths
+
 <details>
 <summary>Mock and trace</summary>
 
@@ -80,11 +97,18 @@ What happens when you pick this path:
 
 - The runtime answers with mock components and can print step-level trace details.
 - You quickly verify command wiring and output structure before using real models.
+- A native popup visualization opens automatically (no localhost server needed).
 
 ```bash
 python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
 python -m zero_barrier_runtime.scripts.mock_trace_demo
 ```
+
+Visualization options:
+
+- Force popup: `--visualize popup`
+- Terminal only: `--visualize terminal`
+- Disable output rendering: `--visualize off`
 
 </details>
 
@@ -97,15 +121,18 @@ What happens when you pick this path:
 
 - You build each module index with ingest, then query that index interactively.
 - You can compare baseline Naive RAG against Advanced hybrid retrieval behavior.
+- Query commands now open a native popup visualization by default (no localhost).
 
 ```bash
 cd 01_Naive_RAG
 python ingest.py
 python query.py
+python query.py --question "Why does chunking help?"
 
 cd 02_Advanced_RAG
 python ingest.py
 python query.py
+python query.py --question "How does reranking improve quality?"
 ```
 
 </details>
