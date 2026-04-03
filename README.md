@@ -16,41 +16,19 @@ RAGgedy is a learning-first RAG repo built like Lego blocks: each module isolate
 
 ---
 
-## 🗺️ Pick Your Path (Zero-Barrier)
+## 🧭 Start Here
 
-```mermaid
-flowchart LR
-	Q["How do you want to learn?"] --> A{"Your setup"}
-	A -->|"No API, no model"| T1["Tier 1: Theoretical Sandbox"]
-	A -->|"Internet + API key"| T2["Tier 2: Cloud Pilot"]
-	A -->|"Local runtime + privacy"| T3["Tier 3: Local Titan"]
+If you want the shortest path into the repo, open these files first:
 
-	T1 --> T1a["Simulated Thoughts -> Actions -> Results"]
-	T2 --> T2a["Hosted OSS models: Groq/Together/HF"]
-	T3 --> T3a["Ollama/local execution"]
-
-	classDef q fill:#f8fafc,stroke:#334155,color:#0f172a;
-	classDef t1 fill:#fef3c7,stroke:#a16207,color:#422006;
-	classDef t2 fill:#dbeafe,stroke:#1d4ed8,color:#0f172a;
-	classDef t3 fill:#dcfce7,stroke:#166534,color:#052e16;
-	class Q,A q;
-	class T1,T1a t1;
-	class T2,T2a t2;
-	class T3,T3a t3;
-```
-
-### Start in under 2 minutes
-
-```bash
-python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
-python -m zero_barrier_runtime.scripts.mock_trace_demo
-```
-
-Design docs for the zero-barrier model:
-
-- [docs/zero_barrier/README_TEMPLATE.md](docs/zero_barrier/README_TEMPLATE.md)
-- [docs/zero_barrier/CODE_STRUCTURE_PLAN.md](docs/zero_barrier/CODE_STRUCTURE_PLAN.md)
-- [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md)
+| What you want | Open this | Why it helps |
+|---|---|---|
+| Big-picture overview | [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md) | Plain-English walkthrough of the whole runtime |
+| Runtime design | [docs/zero_barrier/CODE_STRUCTURE_PLAN.md](docs/zero_barrier/CODE_STRUCTURE_PLAN.md) | Shows how the zero-barrier pieces fit together |
+| Module 01 | [01_Naive_RAG/README.md](01_Naive_RAG/README.md) | Baseline chunk -> embed -> retrieve -> generate flow |
+| Module 02 | [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md) | Hybrid retrieval, RRF, and reranking |
+| Live UI | [visualization/README.md](visualization/README.md) | Step-by-step Streamlit view of ingest/query |
+| Mock runtime | [zero_barrier_runtime/app.py](zero_barrier_runtime/app.py) | Entry point for mock, API, and local modes |
+| Mock demo | [zero_barrier_runtime/scripts/mock_trace_demo.py](zero_barrier_runtime/scripts/mock_trace_demo.py) | Fastest way to see the trace format |
 
 ---
 
@@ -75,121 +53,54 @@ flowchart LR
 
 ## 📚 Module Map
 
-| Module | What you learn | Run docs |
-|---|---|---|
-| 01_Naive_RAG | Baseline chunk -> embed -> retrieve -> generate | [01_Naive_RAG/README.md](01_Naive_RAG/README.md) |
-| 02_Advanced_RAG | Hybrid retrieval (dense + BM25), RRF, rerank | [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md) |
-
-```mermaid
-flowchart LR
-	M1[01 Naive RAG] --> M2[02 Advanced RAG]
-	M2 --> M3[03 Agentic RAG - planned]
-	M3 --> M4[04 Geo RAG - planned]
-
-	classDef done fill:#dcfce7,stroke:#166534,color:#052e16;
-	classDef plan fill:#e2e8f0,stroke:#475569,color:#0f172a;
-	class M1,M2 done;
-	class M3,M4 plan;
-```
+| Module | What you learn | Main docs | Run / eval |
+|---|---|---|---|
+| 01_Naive_RAG | Baseline chunk -> embed -> retrieve -> generate | [README](01_Naive_RAG/README.md), [notebook](01_Naive_RAG/notebooks/01_walkthrough.ipynb) | [ingest](01_Naive_RAG/ingest.py), [query](01_Naive_RAG/query.py), [eval](01_Naive_RAG/evaluation/eval_naive.py) |
+| 02_Advanced_RAG | Hybrid retrieval (dense + BM25), RRF, rerank | [README](02_Advanced_RAG/README.md), [notebook](02_Advanced_RAG/notebooks/02_walkthrough.ipynb) | [ingest](02_Advanced_RAG/ingest.py), [query](02_Advanced_RAG/query.py), [eval](02_Advanced_RAG/evaluation/eval_advanced.py) |
+| Zero-barrier runtime | Mock, API, and local execution paths | [template](docs/zero_barrier/README_TEMPLATE.md), [tutorial](docs/zero_barrier/TUTORIAL_ELI5.md) | [app](zero_barrier_runtime/app.py), [trace demo](zero_barrier_runtime/scripts/mock_trace_demo.py) |
+| Visualization | Live ingest/query stepping | [README](visualization/README.md) | [app](visualization/app.py) |
 
 ---
 
 ## 🚀 Quick Start
 
-### 1) One-time setup
+### 1) Set up the environment once
 
 ```bash
-git clone https://github.com/Troy-LL/RAGgedy.git
-cd RAGgedy
 python -m venv .venv
-```
-
-Windows:
-
-```bash
 .venv\Scripts\activate
-```
-
-Linux/macOS:
-
-```bash
-source .venv/bin/activate
-```
-
-### 2) Install dependencies
-
-```bash
 pip install -r 01_Naive_RAG/requirements.txt
 pip install -r 02_Advanced_RAG/requirements.txt
-```
-
-### 3) Choose one path
-
-#### Option A: Tier 1 Theoretical Sandbox (Mock)
-
-```bash
-python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
-python -m zero_barrier_runtime.scripts.mock_trace_demo
-```
-
-#### Option B: Tier 2 Cloud Pilot (API)
-
-```bash
-set MODEL_PROVIDER=groq
-set MODEL_NAME=llama-3.1-8b-instant
-set MODEL_API_KEY=your_api_key_here
-python -m zero_barrier_runtime.app --mode api --question "Explain vector embeddings like I am 5"
-```
-
-#### Option C: Tier 3 Local Titan (On-Prem)
-
-```bash
-ollama pull llama3.1:8b
-python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --question "How does retrieval improve answer quality?"
-```
-
-### 4) Run classic module pipelines
-
-#### Baseline module (01)
-
-```bash
-cd 01_Naive_RAG
-python ingest.py
-python query.py
-```
-
-#### Advanced module (02)
-
-```bash
-cd 02_Advanced_RAG
-python ingest.py
-python query.py
-```
-
-### 5) Optional visualization app
-
-```bash
 pip install -r visualization/requirements.txt
-streamlit run visualization/app.py
 ```
 
-See [visualization/README.md](visualization/README.md) for stage-by-stage UI behavior.
+### 2) Pick one path
+
+| Path | Best for | Command |
+|---|---|---|
+| Mock demo | Fastest way to understand the runtime | `python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace` |
+| Trace-only demo | A tiny, no-setup walkthrough | `python -m zero_barrier_runtime.scripts.mock_trace_demo` |
+| Module 01 | Classic local-first RAG | `cd 01_Naive_RAG` then `python ingest.py` and `python query.py` |
+| Module 02 | Hybrid retrieval and reranking | `cd 02_Advanced_RAG` then `python ingest.py` and `python query.py` |
+| Live UI | Step-by-step visual debugging | `streamlit run visualization/app.py` |
+| API mode | Hosted OSS models | Set `MODEL_PROVIDER`, `MODEL_NAME`, and `MODEL_API_KEY`, then run `python -m zero_barrier_runtime.app --mode api --question "Explain vector embeddings like I am 5"` |
+| Local mode | Private local inference | `ollama pull llama3.1:8b` then `python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --question "How does retrieval improve answer quality?"` |
+
+### 3) Follow the deeper paths when you are ready
+
+- [01_Naive_RAG/README.md](01_Naive_RAG/README.md)
+- [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md)
+- [visualization/README.md](visualization/README.md)
+- [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md)
 
 ---
 
 ## 🧪 Evaluation Targets
 
-| Module | Faithfulness | Context Precision |
-|---|---:|---:|
-| 01_Naive_RAG | 0.55+ | 0.60+ |
-| 02_Advanced_RAG | 0.65+ | 0.72+ |
-
-Run:
-
-```bash
-python 01_Naive_RAG/evaluation/eval_naive.py
-python 02_Advanced_RAG/evaluation/eval_advanced.py
-```
+| Module | Faithfulness | Context Precision | Eval script |
+|---|---:|---:|---|
+| 01_Naive_RAG | 0.55+ | 0.60+ | [eval_naive.py](01_Naive_RAG/evaluation/eval_naive.py) |
+| 02_Advanced_RAG | 0.65+ | 0.72+ | [eval_advanced.py](02_Advanced_RAG/evaluation/eval_advanced.py) |
 
 ---
 
