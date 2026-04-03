@@ -14,6 +14,14 @@ from pathlib import Path
 import streamlit as st
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+SUPPORTED_MODULES = {"01_Naive_RAG", "02_Advanced_RAG"}
+
+
+def _env_flag(name: str, default: bool = False) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
 def _load_module_from_path(module_name: str, file_path: Path):
@@ -85,10 +93,37 @@ def main():
         "Stream ingestion logs in real time and inspect each retrieval stage on query."
     )
 
+    preset_module = os.getenv("RAGGEDY_VIS_MODULE", "").strip()
+    preset_dataset = (os.getenv("RAGGEDY_DATASET", "") or "").strip()
+    auto_ingest = _env_flag("RAGGEDY_VIS_AUTO_INGEST", default=False)
+    if preset_module and preset_module not in SUPPORTED_MODULES:
+        st.error(
+            f"Invalid RAGGEDY_VIS_MODULE '{preset_module}'. "
+            "Use one of: 01_Naive_RAG, 02_Advanced_RAG."
+        )
+        return
+
+    settings_locked = bool(preset_module)
+    default_module = preset_module or "01_Naive_RAG"
+    default_dataset = preset_dataset or "edu_scholar"
+
     with st.sidebar:
         st.header("Settings")
-        module = st.radio("Module", ["01_Naive_RAG", "02_Advanced_RAG"], index=0)
-        dataset_id = st.text_input("Dataset scenario (`RAGGEDY_DATASET`)", value="edu_scholar")
+        module_options = ["01_Naive_RAG", "02_Advanced_RAG"]
+        module_idx = module_options.index(default_module)
+        module = st.radio(
+            "Module",
+            module_options,
+            index=module_idx,
+            disabled=settings_locked,
+            help="Module is preconfigured by launcher" if settings_locked else None,
+        )
+        dataset_id = st.text_input(
+            "Dataset scenario (`RAGGEDY_DATASET`)",
+            value=default_dataset,
+            disabled=settings_locked,
+            help="Dataset is preconfigured by launcher" if settings_locked else None,
+        )
         if st.button("Clear cached models"):
             st.cache_resource.clear()
             st.success("Cache cleared. Reload the page or run again after re-ingesting.")
@@ -96,14 +131,21 @@ def main():
     ingest_tab, query_tab = st.tabs(["Ingest (live log)", "Query (live stages)"])
 
     with ingest_tab:
+        ds = dataset_id.strip() or "edu_scholar"
         st.markdown(
-            f"Runs `{module}/ingest.py` with **`RAGGEDY_DATASET={dataset_id}`** and streams stdout here."
+            f"Runs `{module}/ingest.py` with **`RAGGEDY_DATASET={ds}`** and streams stdout here."
         )
         log_box = st.empty()
-        if st.button("Run ingestion", type="primary", key="ingest_btn"):
+        run_ingest_clicked = st.button("Run ingestion", type="primary", key="ingest_btn")
+        should_auto_run = auto_ingest and not st.session_state.get("_raggedy_auto_ingest_done")
+        if should_auto_run:
+            st.session_state["_raggedy_auto_ingest_done"] = True
+
+        if run_ingest_clicked or should_auto_run:
             log_box.code("", language="text")
-            with st.status("Ingestion running…", expanded=True) as status:
-                code = _run_ingest(module, dataset_id.strip() or "edu_scholar", log_box)
+            status_label = "Ingestion auto-started..." if should_auto_run else "Ingestion running..."
+            with st.status(status_label, expanded=True) as status:
+                code = _run_ingest(module, ds, log_box)
                 if code == 0:
                     status.update(label="Ingestion finished", state="complete")
                 else:

@@ -100,7 +100,8 @@ python query.py
 <summary>Live UI and API/local modes</summary>
 
 ```bash
-streamlit run visualization/app.py
+python 01_Naive_RAG/visualize.py --dataset edu_scholar
+python 02_Advanced_RAG/visualize.py --dataset edu_scholar
 
 set MODEL_PROVIDER=groq
 set MODEL_NAME=llama-3.1-8b-instant
@@ -109,6 +110,12 @@ python -m zero_barrier_runtime.app --mode api --question "Explain vector embeddi
 
 ollama pull llama3.1:8b
 python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --question "How does retrieval improve answer quality?"
+```
+
+Optional auto-ingest at startup:
+
+```bash
+python 01_Naive_RAG/visualize.py --dataset edu_scholar --auto-ingest
 ```
 
 </details>

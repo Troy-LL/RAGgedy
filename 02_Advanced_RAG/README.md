@@ -60,6 +60,18 @@ python ingest.py
 python query.py
 ```
 
+2.5. Open visualization directly from this module (no separate setup page).
+
+```bash
+python visualize.py --dataset edu_scholar
+```
+
+Auto-run ingestion when the UI opens:
+
+```bash
+python visualize.py --dataset edu_scholar --auto-ingest
+```
+
 3. Evaluate the pipeline.
 
 ```bash
