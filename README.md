@@ -74,6 +74,13 @@ Pick the group that matches what you want to do.
 <details>
 <summary>Mock and trace</summary>
 
+Use this if you want a zero-setup demo of the runtime flow. It does not require external APIs or local model serving, so it is the fastest path to understand orchestration and trace output.
+
+What happens when you pick this path:
+
+- The runtime answers with mock components and can print step-level trace details.
+- You quickly verify command wiring and output structure before using real models.
+
 ```bash
 python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
 python -m zero_barrier_runtime.scripts.mock_trace_demo
@@ -83,6 +90,13 @@ python -m zero_barrier_runtime.scripts.mock_trace_demo
 
 <details>
 <summary>Module pipelines</summary>
+
+Use this if you want to learn core RAG mechanics from raw scripts. This path is best for understanding ingestion, indexing, retrieval, and answer generation in sequence.
+
+What happens when you pick this path:
+
+- You build each module index with ingest, then query that index interactively.
+- You can compare baseline Naive RAG against Advanced hybrid retrieval behavior.
 
 ```bash
 cd 01_Naive_RAG
@@ -99,6 +113,14 @@ python query.py
 <details>
 <summary>Live UI and API/local modes</summary>
 
+Use this if you want interactive visualization and production-like runtime choices. This path is best for demos, debugging retrieval stages, and switching between cloud and local model backends.
+
+What happens when you pick this path:
+
+- Visualization launches pre-bound to the chosen module and dataset.
+- API mode uses your provider/model environment variables.
+- Local mode uses your Ollama-served model.
+
 ```bash
 python 01_Naive_RAG/visualize.py --dataset edu_scholar
 python 02_Advanced_RAG/visualize.py --dataset edu_scholar
@@ -113,6 +135,8 @@ python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --ques
 ```
 
 Optional auto-ingest at startup:
+
+- This starts ingestion automatically when the visualization opens, so first-time setup is faster for the selected dataset.
 
 ```bash
 python 01_Naive_RAG/visualize.py --dataset edu_scholar --auto-ingest
