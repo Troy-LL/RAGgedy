@@ -25,6 +25,31 @@ Module-specific commands, config tables, and architecture diagrams live in each 
 
 Ensure [Ollama](https://ollama.com/) is installed and running locally.
 
+---
+
+## 🌈 Zero-Barrier Learning Path
+
+This repository now includes a beginner-first, hardware-flexible documentation pack:
+
+- **Visual README Template**: `docs/zero_barrier/README_TEMPLATE.md`
+- **Three-Tier Code Structure Plan**: `docs/zero_barrier/CODE_STRUCTURE_PLAN.md`
+- **ELI5 Tutorial Module**: `docs/zero_barrier/TUTORIAL_ELI5.md`
+
+It follows a **Three-Tier Accessibility Model**:
+
+- **Tier 1 — Theoretical Sandbox (Mock Mode)**: Learn instantly with simulated LLM-like traces (no model, no API).
+- **Tier 2 — Cloud Pilot (API Mode)**: Use hosted open-source models such as Llama or Mistral through API providers.
+- **Tier 3 — Local Titan (On-Prem)**: Run locally for privacy and full control.
+
+Start with the template and adapt module-specific commands as needed.
+
+Quick runnable examples (from repo root):
+
+```bash
+python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
+python -m zero_barrier_runtime.scripts.mock_trace_demo
+```
+
 ### 1. Pull the chat model
 
 ```bash
