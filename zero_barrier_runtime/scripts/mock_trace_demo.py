@@ -51,6 +51,7 @@ def run_demo(question: str, visualize: str):
         return
 
     if visualize in {"auto", "popup"}:
+        # Popup-first presentation; `auto` falls back to terminal if popup is unavailable.
         render_text(
             _compose_demo_text(question, bundle),
             visualize,
@@ -87,11 +88,13 @@ def run_demo(question: str, visualize: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Polished mock trace demo")
+    # Custom prompt for live demos/classes.
     parser.add_argument(
         "--question",
         default="Why does chunking help a RAG system answer better?",
         help="Question to demonstrate",
     )
+    # Shared visualization behavior across scripts.
     parser.add_argument(
         "--visualize",
         choices=["auto", "popup", "terminal", "off"],

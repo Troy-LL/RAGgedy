@@ -76,6 +76,7 @@ If you prefer one command for everything, use the project runner:
 ```bash
 python run.py --path mock --show-trace
 python run.py --path demo
+# Choose ONE module path per run (these are alternatives, not a combined execution).
 python run.py --path naive --dataset edu_scholar
 python run.py --path advanced --dataset edu_scholar
 python run.py --path api --question "Explain vector embeddings like I am 5"

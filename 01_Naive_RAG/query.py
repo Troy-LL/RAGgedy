@@ -85,7 +85,9 @@ def _ask_once(query_engine, question: str, visualize: str) -> None:
 
 def main():
     parser = argparse.ArgumentParser(description="Query 01_Naive_RAG")
+    # Optional one-shot mode; if omitted, the script stays interactive.
     parser.add_argument("--question", default=None, help="Run one question and exit")
+    # Unified visualization control used across the project.
     parser.add_argument(
         "--visualize",
         choices=["auto", "popup", "terminal", "off"],
@@ -109,6 +111,7 @@ def main():
     print("=" * 50)
 
     if args.question:
+        # One-shot execution path for demos/automation.
         _ask_once(query_engine, args.question.strip(), args.visualize)
         return
 

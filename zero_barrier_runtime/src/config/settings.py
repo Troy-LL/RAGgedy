@@ -4,6 +4,7 @@ import os
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Zero-barrier RAG runtime")
+    # Core execution knobs.
     parser.add_argument("--mode", choices=["mock", "api", "local"], default="mock")
     parser.add_argument("--question", required=True)
     parser.add_argument("--top-k", type=int, default=3)
@@ -19,10 +20,12 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
 
+    # API mode defaults to environment variables for zero-friction setup.
     parser.add_argument("--provider", default=os.getenv("MODEL_PROVIDER", "groq"))
     parser.add_argument("--model", default=os.getenv("MODEL_NAME", "llama-3.1-8b-instant"))
     parser.add_argument("--api-key", default=os.getenv("MODEL_API_KEY", ""))
 
+    # Local mode defaults to an Ollama-compatible endpoint.
     parser.add_argument(
         "--local-base-url",
         default=os.getenv("LOCAL_BASE_URL", "http://localhost:11434"),
