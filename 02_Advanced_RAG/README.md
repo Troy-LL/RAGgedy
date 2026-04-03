@@ -1,89 +1,81 @@
 # Module 02: Advanced RAG 🧩
 
-The **02_Advanced_RAG** module introduces the hybrid search and reranking architecture. It builds upon the naive approach from Module 01 by resolving issues with semantic ambiguity, significantly boosting contextual relevance and accuracy.
+This module extends the baseline pipeline with hybrid retrieval and reranking. The goal is still to keep the learning path visual and inspectable, but now you can see how dense and sparse retrieval combine before the answer is generated.
 
 ---
 
-## 🏗️ Architecture Breakdown
-
-This module implements a powerful "Hybrid" RAG flow using Reciprocal Rank Fusion and Cross-Encoders:
+## 🗺️ Visual Learning Path
 
 ```mermaid
-graph LR
-    subgraph Offline: Ingestion
-        A[Loading] --> B[Chunking]
-        B --> C1[Dense Embedding]
-        B --> C2[Sparse Keyword]
-        C1 --> D1[ChromaDB]
-        C2 --> D2[BM25 Index]
-    end
-    
-    subgraph Online: Retrieval
-        E[User Query] --> F1[Retriever Semantic]
-        E --> F2[Retriever BM25]
-        D1 -.-> F1
-        D2 -.-> F2
-        F1 --> G[Fusion RRF]
-        F2 --> G
-        G --> H[Cross-Encoder Reranker]
-    end
-    
-    subgraph Generation
-        H --> I[Context + Prompt]
-        I --> J[LLM: Llama3]
-        J --> K[Final Answer]
-    end
+flowchart LR
+	A[Start with data] --> B[Chunk]
+	B --> C1[Dense embed]
+	B --> C2[Sparse index]
+	C1 --> D1[(Dense store)]
+	C2 --> D2[(BM25 index)]
+	Q[Question] --> R1[Dense retrieval]
+	Q --> R2[BM25 retrieval]
+	D1 --> R1
+	D2 --> R2
+	R1 --> F[Fuse with RRF]
+	R2 --> F
+	F --> X[Rerank]
+	X --> P[Prompt with context]
+	P --> L[LLM]
+	L --> O[Answer]
+
+	classDef step fill:#f7f7f5,stroke:#4c4c4c,color:#1f1f1f;
+	class A,B,C1,C2,D1,D2,Q,R1,R2,F,X,P,L,O step;
 ```
 
----
-
-## 🛠️ Components & Configuration
-
-All configurations are centralized in `config.py`.
-
-| Parameter | Default (Good) | Broken (Variant) |
-|---|---|---|
-| **BM25 / Sparse** | Enabled | **Disabled** |
-| **Fusion (RRF)** | Enabled | **Disabled** |
-| **Cross-Encoder** | `ms-marco-MiniLM...` | **Off / Weaker Dense Model** |
-| **CHUNK_SIZE** | 512 | 1024 |
-| **CHUNK_OVERLAP** | 64 | 0 |
+The visual story here is: retrieve from two angles, fuse the evidence, then rerank before generation.
 
 ---
 
-## 🚀 How to Use
+## 📚 Key Files
 
-### 1. Ingestion
-Build your dual-vector and sparse indices by processing the active dataset (default: *Edu-Scholar* under `data/datasets/edu_scholar/`).
+| File | What it controls |
+|---|---|
+| [config.py](config.py) | Chunking, BM25, fusion, and reranker defaults |
+| [ingest.py](ingest.py) | Hybrid ingestion pipeline |
+| [ingest_broken.py](ingest_broken.py) | Intentionally degraded hybrid variant |
+| [query.py](query.py) | Hybrid retrieval and generation flow |
+| [evaluation/eval_advanced.py](evaluation/eval_advanced.py) | Advanced evaluation script |
+| [notebooks/02_walkthrough.ipynb](notebooks/02_walkthrough.ipynb) | Visual walkthrough of hybrid retrieval |
+| [data/README.md](data/README.md) | Dataset layout and `RAGGEDY_DATASET` usage |
 
-To use another scenario, add `data/datasets/<your_id>/` with `passages/` (and optional `questions.json`), then set **`RAGGEDY_DATASET`** before running scripts (see `data/README.md`).
+---
+
+## 🚀 Run It
+
+1. Build the indexes.
 
 ```bash
 python ingest.py
 ```
 
-### 2. Querying
-Ask questions through the interactive CLI to test hybrid results.
+2. Ask questions through the hybrid retriever.
+
 ```bash
 python query.py
 ```
 
-### 3. Evaluation
-Run [Ragas](https://docs.ragas.io/en/stable/) to observe the measurable gap caused by missing out on hybrid architecture principles via our mock RAGAS comparison tools.
+3. Evaluate the pipeline.
+
 ```bash
-# Evaluate Default (Good) Pipeline
 python evaluation/eval_advanced.py
 ```
 
----
-
-## 🧪 The "Broken" Variant
-
-This module includes an intentionally degraded script: `ingest_broken.py`. 
-Run this to observe how excluding BM25 fusion and advanced Cross-Encoder context reranking allows irrelevant context into the prompt, reducing Faithfulness and Context Precision.
+If you want to use a different dataset, create `data/datasets/<your_id>/passages/` and optionally `questions.json`, then set `RAGGEDY_DATASET` before running the scripts.
 
 ---
 
-## 📘 Walkthrough Notebook
+## 🧪 Compare the Broken Variant
 
-For a step-by-step guided tutorial with visualizations of hybrid score distributions, open `notebooks/02_walkthrough.ipynb`.
+`ingest_broken.py` removes the hybrid behavior on purpose. Use it to see how much recall and ranking quality drop when BM25 fusion or reranking is missing.
+
+---
+
+## 📘 Visual Walkthrough
+
+Open [notebooks/02_walkthrough.ipynb](notebooks/02_walkthrough.ipynb) to inspect the retrieval stages, score combination, and reranking flow visually.

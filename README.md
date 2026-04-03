@@ -18,15 +18,27 @@ RAGgedy is a learning-first RAG repo built like Lego blocks: each module isolate
 
 ## 🧭 Start Here
 
-If you want the shortest path into the repo, open these files first:
+If you want the shortest path into the repo, start with the section that matches your goal.
+
+### Learn the repo
 
 | What you want | Open this | Why it helps |
 |---|---|---|
 | Big-picture overview | [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md) | Plain-English walkthrough of the whole runtime |
 | Runtime design | [docs/zero_barrier/CODE_STRUCTURE_PLAN.md](docs/zero_barrier/CODE_STRUCTURE_PLAN.md) | Shows how the zero-barrier pieces fit together |
+| Visualization guide | [visualization/README.md](visualization/README.md) | Shows the live ingest/query UI |
+
+### Explore the modules
+
+| What you want | Open this | Why it helps |
+|---|---|---|
 | Module 01 | [01_Naive_RAG/README.md](01_Naive_RAG/README.md) | Baseline chunk -> embed -> retrieve -> generate flow |
 | Module 02 | [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md) | Hybrid retrieval, RRF, and reranking |
-| Live UI | [visualization/README.md](visualization/README.md) | Step-by-step Streamlit view of ingest/query |
+
+### Try the runtime
+
+| What you want | Open this | Why it helps |
+|---|---|---|
 | Mock runtime | [zero_barrier_runtime/app.py](zero_barrier_runtime/app.py) | Entry point for mock, API, and local modes |
 | Mock demo | [zero_barrier_runtime/scripts/mock_trace_demo.py](zero_barrier_runtime/scripts/mock_trace_demo.py) | Fastest way to see the trace format |
 
@@ -57,7 +69,6 @@ flowchart LR
 |---|---|---|---|
 | 01_Naive_RAG | Baseline chunk -> embed -> retrieve -> generate | [README](01_Naive_RAG/README.md), [notebook](01_Naive_RAG/notebooks/01_walkthrough.ipynb) | [ingest](01_Naive_RAG/ingest.py), [query](01_Naive_RAG/query.py), [eval](01_Naive_RAG/evaluation/eval_naive.py) |
 | 02_Advanced_RAG | Hybrid retrieval (dense + BM25), RRF, rerank | [README](02_Advanced_RAG/README.md), [notebook](02_Advanced_RAG/notebooks/02_walkthrough.ipynb) | [ingest](02_Advanced_RAG/ingest.py), [query](02_Advanced_RAG/query.py), [eval](02_Advanced_RAG/evaluation/eval_advanced.py) |
-| Zero-barrier runtime | Mock, API, and local execution paths | [template](docs/zero_barrier/README_TEMPLATE.md), [tutorial](docs/zero_barrier/TUTORIAL_ELI5.md) | [app](zero_barrier_runtime/app.py), [trace demo](zero_barrier_runtime/scripts/mock_trace_demo.py) |
 | Visualization | Live ingest/query stepping | [README](visualization/README.md) | [app](visualization/app.py) |
 
 ---

@@ -1,80 +1,74 @@
 # Module 01: Naive RAG 🧩
 
-The **01_Naive_RAG** module is the entry point of the **RAGgedy** educational series. It demonstrates a complete, local-first RAG pipeline using LlamaIndex and Ollama. 
+This module is the baseline RAG path for RAGgedy. It shows the full local-first flow with the fewest moving parts so you can see the pipeline clearly before adding more retrieval logic.
 
 ---
 
-## 🏗️ Architecture Breakdown
-
-This module implements a standard "Naive" RAG flow:
+## 🗺️ Visual Learning Path
 
 ```mermaid
-graph LR
-    subgraph Offline: Ingestion
-        A[Loading] --> B[Chunking]
-        B --> C[Embedding]
-        C --> D[Storing in ChromaDB]
-    end
-    
-    subgraph Online: Retrieval
-        E[User Query] --> F[Retriever]
-        D -.-> F
-        F --> G[Context + Prompt]
-    end
-    
-    subgraph Generation
-        G --> H[LLM: Llama3]
-        H --> I[Final Answer]
-    end
+flowchart LR
+	A[Start with data] --> B[Chunk]
+	B --> C[Embed]
+	C --> D[(Vector store)]
+	Q[Question] --> R[Retrieve]
+	D --> R
+	R --> P[Prompt with context]
+	P --> L[LLM]
+	L --> O[Answer]
+
+	classDef step fill:#f7f7f5,stroke:#4c4c4c,color:#1f1f1f;
+	class A,B,C,D,Q,R,P,L,O step;
 ```
 
----
-
-## 🛠️ Components & Configuration
-
-All configurations are centralized in `config.py`.
-
-| Parameter | Default (Good) | Broken (Variant) |
-|---|---|---|
-| **CHUNK_SIZE** | 512 | 4096 |
-| **CHUNK_OVERLAP** | 64 | 0 |
-| **TOP_K** | 5 | 1 |
+The idea is to inspect one stage at a time, then compare how the output changes when you alter chunking or retrieval settings.
 
 ---
 
-## 🚀 How to Use
+## 📚 Key Files
 
-### 1. Ingestion
-Build your vector index by processing the active dataset (default: *Edu-Scholar* under `data/datasets/edu_scholar/`).
+| File | What it controls |
+|---|---|
+| [config.py](config.py) | Chunk size, overlap, and top-k defaults |
+| [ingest.py](ingest.py) | The normal ingestion pipeline |
+| [ingest_broken.py](ingest_broken.py) | Intentionally degraded ingestion variant |
+| [query.py](query.py) | Interactive question answering |
+| [evaluation/eval_naive.py](evaluation/eval_naive.py) | Baseline evaluation script |
+| [notebooks/01_walkthrough.ipynb](notebooks/01_walkthrough.ipynb) | Visual, step-by-step walkthrough |
+| [data/README.md](data/README.md) | Dataset layout and `RAGGEDY_DATASET` usage |
 
-To use another scenario, add `data/datasets/<your_id>/passages/` (and optional `questions.json`), then set `RAGGEDY_DATASET` before running scripts (see `data/README.md`).
+---
+
+## 🚀 Run It
+
+1. Build the index.
 
 ```bash
 python ingest.py
 ```
 
-### 2. Querying
-Ask questions through the interactive CLI.
+2. Ask questions.
+
 ```bash
 python query.py
 ```
 
-### 3. Evaluation
-Run [Ragas](https://docs.ragas.io/en/stable/) to see why our "Good" pipeline is better than the "Broken" one.
+3. Evaluate the baseline.
+
 ```bash
-# Evaluate Default (Good) Pipeline
 python evaluation/eval_naive.py
 ```
 
----
-
-## 🧪 The "Broken" Variant
-
-This module includes an intentionally degraded script: `ingest_broken.py`. 
-Run this to see how poor architectural decisions (like massive chunks without overlap) degrade Faithfulness and Context Precision scores.
+If you want to use a different dataset, create `data/datasets/<your_id>/passages/` and optionally `questions.json`, then set `RAGGEDY_DATASET` before running the scripts.
 
 ---
 
-## 📘 Walkthrough Notebook
+## 🧪 Compare the Broken Variant
 
-For a step-by-step guided tutorial with visualizations of each stage, open `notebooks/01_walkthrough.ipynb`.
+`ingest_broken.py` is intentionally bad on purpose. Use it to see how large chunks and missing overlap change the retrieval trace and weaken Faithfulness and Context Precision.
+
+---
+
+## 📘 Visual Walkthrough
+
+Open [notebooks/01_walkthrough.ipynb](notebooks/01_walkthrough.ipynb) to follow the pipeline stage by stage with visuals and outputs.
