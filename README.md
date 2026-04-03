@@ -1,85 +1,129 @@
 # RAGgedy 🧩
 
-**RAGgedy** is an open-source educational repository of Retrieval-Augmented Generation (RAG) templates, designed as a modular "Lego kit" for developers.
+<div align="center">
 
-Most RAG examples are monolithic. **RAGgedy** breaks the RAG pipeline into distinct, clear, and modular stages, starting from first principles and increasing in complexity across successive modules.
+### Open-Source RAG Templates That Start Simple and Scale Clearly
 
----
+![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)
+![License](https://img.shields.io/badge/License-MIT-green.svg)
+![Status](https://img.shields.io/badge/Status-Actively%20Maintained-brightgreen.svg)
+![Beginner Friendly](https://img.shields.io/badge/Beginner-Friendly-orange.svg)
+![Offline First](https://img.shields.io/badge/Mode-Offline%20First-informational.svg)
 
-## 🏗️ Project Architecture
+</div>
 
-RAGgedy is organized into numbered modules, each focusing on a specific architectural shift or technique. Each module includes **good** vs **broken** ingestion variants, optional [Ragas](https://docs.ragas.io/en/stable/) evaluation, and a Jupyter walkthrough notebook.
-
-| Module | Focus | Highlights |
-|--------|--------|------------|
-| **01_Naive_RAG** | Baseline RAG | LlamaIndex, Ollama (llama3), [BAAI/bge-m3](https://huggingface.co/BAAI/bge-m3) embeddings, [ChromaDB](https://www.trychroma.com/), chunk → embed → retrieve → generate |
-| **02_Advanced_RAG** | Hybrid retrieval | Dense + [BM25](https://github.com/dorianbrown/rank_bm25) sparse indices, **Reciprocal Rank Fusion (RRF)**, **cross-encoder reranking** (`cross-encoder/ms-marco-MiniLM-L-12-v2`) |
-
-**Datasets**: Each module keeps corpora under `data/datasets/<scenario>/` (default scenario **`edu_scholar`**: synthetic CET-style *Edu-Scholar* passages). Set environment variable **`RAGGEDY_DATASET`** to the scenario folder name to ingest and query a different corpus; indexes are stored per scenario under `.chroma/<scenario>/` (and `.bm25_index/<scenario>/` in module 02). See each module’s `data/README.md`.
-
-Module-specific commands, config tables, and architecture diagrams live in each folder’s `README.md` (e.g. [01_Naive_RAG/README.md](01_Naive_RAG/README.md), [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md)).
+RAGgedy is a learning-first RAG repo built like Lego blocks: each module isolates one architectural idea so you can see what changed, why it changed, and how quality improves.
 
 ---
 
-## 🚀 Quick Start
+## 🗺️ Pick Your Path (Zero-Barrier)
 
-Ensure [Ollama](https://ollama.com/) is installed and running locally.
+```mermaid
+flowchart LR
+	Q["How do you want to learn?"] --> A{"Your setup"}
+	A -->|"No API, no model"| T1["Tier 1: Theoretical Sandbox"]
+	A -->|"Internet + API key"| T2["Tier 2: Cloud Pilot"]
+	A -->|"Local runtime + privacy"| T3["Tier 3: Local Titan"]
 
----
+	T1 --> T1a["Simulated Thoughts -> Actions -> Results"]
+	T2 --> T2a["Hosted OSS models: Groq/Together/HF"]
+	T3 --> T3a["Ollama/local execution"]
 
-## 🌈 Zero-Barrier Learning Path
+	classDef q fill:#f8fafc,stroke:#334155,color:#0f172a;
+	classDef t1 fill:#fef3c7,stroke:#a16207,color:#422006;
+	classDef t2 fill:#dbeafe,stroke:#1d4ed8,color:#0f172a;
+	classDef t3 fill:#dcfce7,stroke:#166534,color:#052e16;
+	class Q,A q;
+	class T1,T1a t1;
+	class T2,T2a t2;
+	class T3,T3a t3;
+```
 
-This repository now includes a beginner-first, hardware-flexible documentation pack:
-
-- **Visual README Template**: `docs/zero_barrier/README_TEMPLATE.md`
-- **Three-Tier Code Structure Plan**: `docs/zero_barrier/CODE_STRUCTURE_PLAN.md`
-- **ELI5 Tutorial Module**: `docs/zero_barrier/TUTORIAL_ELI5.md`
-
-It follows a **Three-Tier Accessibility Model**:
-
-- **Tier 1 — Theoretical Sandbox (Mock Mode)**: Learn instantly with simulated LLM-like traces (no model, no API).
-- **Tier 2 — Cloud Pilot (API Mode)**: Use hosted open-source models such as Llama or Mistral through API providers.
-- **Tier 3 — Local Titan (On-Prem)**: Run locally for privacy and full control.
-
-Start with the template and adapt module-specific commands as needed.
-
-Quick runnable examples (from repo root):
+### Start in under 2 minutes
 
 ```bash
 python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
 python -m zero_barrier_runtime.scripts.mock_trace_demo
 ```
 
-### 1. Pull the chat model
+Design docs for the zero-barrier model:
 
-```bash
-ollama pull llama3
+- [docs/zero_barrier/README_TEMPLATE.md](docs/zero_barrier/README_TEMPLATE.md)
+- [docs/zero_barrier/CODE_STRUCTURE_PLAN.md](docs/zero_barrier/CODE_STRUCTURE_PLAN.md)
+- [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md)
+
+---
+
+## 🏗️ Architecture At A Glance
+
+```mermaid
+flowchart LR
+	D[Documents] --> C[Chunk]
+	C --> E[Embed]
+	E --> V[(Vector Store)]
+	Q[User Question] --> R[Retrieve]
+	V --> R
+	R --> P[Prompt With Context]
+	P --> L[LLM]
+	L --> A[Answer + Sources]
+
+	classDef neutral fill:#f7f7f5,stroke:#4c4c4c,color:#1f1f1f;
+	class D,C,E,V,Q,R,P,L,A neutral;
 ```
 
-### 2. Environment setup
+---
+
+## 📚 Module Map
+
+| Module | What you learn | Run docs |
+|---|---|---|
+| 01_Naive_RAG | Baseline chunk -> embed -> retrieve -> generate | [01_Naive_RAG/README.md](01_Naive_RAG/README.md) |
+| 02_Advanced_RAG | Hybrid retrieval (dense + BM25), RRF, rerank | [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md) |
+
+```mermaid
+flowchart LR
+	M1[01 Naive RAG] --> M2[02 Advanced RAG]
+	M2 --> M3[03 Agentic RAG - planned]
+	M3 --> M4[04 Geo RAG - planned]
+
+	classDef done fill:#dcfce7,stroke:#166534,color:#052e16;
+	classDef plan fill:#e2e8f0,stroke:#475569,color:#0f172a;
+	class M1,M2 done;
+	class M3,M4 plan;
+```
+
+---
+
+## 🚀 Quick Start
+
+### 1) Setup
 
 ```bash
 git clone https://github.com/Troy-LL/RAGgedy.git
 cd RAGgedy
-
 python -m venv .venv
-# Windows
+```
+
+Windows:
+
+```bash
 .venv\Scripts\activate
-# Linux / macOS
+```
+
+Linux/macOS:
+
+```bash
 source .venv/bin/activate
 ```
 
-Install dependencies for the module you want to run (each module has its own `requirements.txt`):
+### 2) Install dependencies
 
 ```bash
 pip install -r 01_Naive_RAG/requirements.txt
-# and/or
 pip install -r 02_Advanced_RAG/requirements.txt
 ```
 
-### 3. Run a pipeline
-
-**Naive RAG (Module 01)**
+### 3) Run baseline module
 
 ```bash
 cd 01_Naive_RAG
@@ -87,7 +131,7 @@ python ingest.py
 python query.py
 ```
 
-**Advanced RAG (Module 02)**
+### 4) Run advanced module
 
 ```bash
 cd 02_Advanced_RAG
@@ -95,51 +139,41 @@ python ingest.py
 python query.py
 ```
 
-### 4. Evaluation (optional)
+### 5) Optional visualization app
 
 ```bash
-# From 01_Naive_RAG
-python evaluation/eval_naive.py
-
-# From 02_Advanced_RAG
-python evaluation/eval_advanced.py
-```
-
-### 5. Notebooks
-
-- `01_Naive_RAG/notebooks/01_walkthrough.ipynb`
-- `02_Advanced_RAG/notebooks/02_walkthrough.ipynb`
-
-### 6. Live visualization (optional)
-
-Install a module’s `requirements.txt`, then `pip install -r visualization/requirements.txt`. From the repo root:
-
-```bash
+pip install -r visualization/requirements.txt
 streamlit run visualization/app.py
 ```
 
-The app streams **ingestion** output in real time and shows **query** stages (dense retrieval; for module 02 also BM25, RRF, rerank). See [visualization/README.md](visualization/README.md).
+See [visualization/README.md](visualization/README.md) for stage-by-stage UI behavior.
 
 ---
 
-## 🛠️ Module Roadmap
+## 🧪 Evaluation Targets
 
-- [x] **01_Naive_RAG**: Entry-point pipeline with good/broken variants.
-- [x] **02_Advanced_RAG**: Hybrid search (BM25 + dense), RRF fusion, cross-encoder reranking, good/broken variants.
-- [ ] **03_Agentic_RAG**: Self-correction, tool use, and multi-step reasoning.
-- [ ] **04_Geo_RAG**: Spatial-semantic indexing for geographic queries.
+| Module | Faithfulness | Context Precision |
+|---|---:|---:|
+| 01_Naive_RAG | 0.55+ | 0.60+ |
+| 02_Advanced_RAG | 0.65+ | 0.72+ |
+
+Run:
+
+```bash
+python 01_Naive_RAG/evaluation/eval_naive.py
+python 02_Advanced_RAG/evaluation/eval_advanced.py
+```
 
 ---
 
-## 🧪 Evaluation
+## 🧠 Why This Repo Feels Different
 
-RAGgedy uses [Ragas](https://docs.ragas.io/en/stable/) for pipeline evaluation. Reference targets (see each module’s `config` / docs):
-
-- **01_Naive_RAG**: Faithfulness ≥ 0.55, Context precision ≥ 0.60  
-- **02_Advanced_RAG**: Faithfulness ≥ 0.65, Context precision ≥ 0.72  
+- Learning-first: every module is runnable and intentionally scoped.
+- Compare-forward: good vs broken variants show failure modes clearly.
+- Zero-barrier: mock, cloud, and local paths support different hardware realities.
 
 ---
 
 ## ⚖️ License
 
-MIT License. See [LICENSE](LICENSE) for details.
+[LICENSE](LICENSE) (MIT)
