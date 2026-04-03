@@ -69,15 +69,49 @@ pip install -r visualization/requirements.txt
 
 ### 2) Pick one path
 
-| Path | Best for | Command |
-|---|---|---|
-| Mock demo | Fastest way to understand the runtime | `python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace` |
-| Trace-only demo | A tiny, no-setup walkthrough | `python -m zero_barrier_runtime.scripts.mock_trace_demo` |
-| Module 01 | Classic local-first RAG | `cd 01_Naive_RAG` then `python ingest.py` and `python query.py` |
-| Module 02 | Hybrid retrieval and reranking | `cd 02_Advanced_RAG` then `python ingest.py` and `python query.py` |
-| Live UI | Step-by-step visual debugging | `streamlit run visualization/app.py` |
-| API mode | Hosted OSS models | Set `MODEL_PROVIDER`, `MODEL_NAME`, and `MODEL_API_KEY`, then run `python -m zero_barrier_runtime.app --mode api --question "Explain vector embeddings like I am 5"` |
-| Local mode | Private local inference | `ollama pull llama3.1:8b` then `python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --question "How does retrieval improve answer quality?"` |
+Pick the group that matches what you want to do.
+
+<details>
+<summary>Mock and trace</summary>
+
+```bash
+python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
+python -m zero_barrier_runtime.scripts.mock_trace_demo
+```
+
+</details>
+
+<details>
+<summary>Module pipelines</summary>
+
+```bash
+cd 01_Naive_RAG
+python ingest.py
+python query.py
+
+cd 02_Advanced_RAG
+python ingest.py
+python query.py
+```
+
+</details>
+
+<details>
+<summary>Live UI and API/local modes</summary>
+
+```bash
+streamlit run visualization/app.py
+
+set MODEL_PROVIDER=groq
+set MODEL_NAME=llama-3.1-8b-instant
+set MODEL_API_KEY=your_api_key_here
+python -m zero_barrier_runtime.app --mode api --question "Explain vector embeddings like I am 5"
+
+ollama pull llama3.1:8b
+python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --question "How does retrieval improve answer quality?"
+```
+
+</details>
 
 ### 3) Follow the deeper paths when you are ready
 
