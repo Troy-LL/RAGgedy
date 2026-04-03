@@ -18,29 +18,11 @@ RAGgedy is a learning-first RAG repo built like Lego blocks: each module isolate
 
 ## 🧭 Start Here
 
-If you want the shortest path into the repo, start with the section that matches your goal.
+If you want the shortest path into the repo, use one of these lanes:
 
-### Learn the repo
-
-| What you want | Open this | Why it helps |
-|---|---|---|
-| Big-picture overview | [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md) | Plain-English walkthrough of the whole runtime |
-| Runtime design | [docs/zero_barrier/CODE_STRUCTURE_PLAN.md](docs/zero_barrier/CODE_STRUCTURE_PLAN.md) | Shows how the zero-barrier pieces fit together |
-| Visualization guide | [visualization/README.md](visualization/README.md) | Shows the live ingest/query UI |
-
-### Explore the modules
-
-| What you want | Open this | Why it helps |
-|---|---|---|
-| Module 01 | [01_Naive_RAG/README.md](01_Naive_RAG/README.md) | Baseline chunk -> embed -> retrieve -> generate flow |
-| Module 02 | [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md) | Hybrid retrieval, RRF, and reranking |
-
-### Try the runtime
-
-| What you want | Open this | Why it helps |
-|---|---|---|
-| Mock runtime | [zero_barrier_runtime/app.py](zero_barrier_runtime/app.py) | Entry point for mock, API, and local modes |
-| Mock demo | [zero_barrier_runtime/scripts/mock_trace_demo.py](zero_barrier_runtime/scripts/mock_trace_demo.py) | Fastest way to see the trace format |
+- Learn the repo: [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md), [docs/zero_barrier/CODE_STRUCTURE_PLAN.md](docs/zero_barrier/CODE_STRUCTURE_PLAN.md), and [visualization/README.md](visualization/README.md)
+- Explore the modules: [01_Naive_RAG/README.md](01_Naive_RAG/README.md) and [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md)
+- Try the runtime: [zero_barrier_runtime/app.py](zero_barrier_runtime/app.py) and [zero_barrier_runtime/scripts/mock_trace_demo.py](zero_barrier_runtime/scripts/mock_trace_demo.py)
 
 ---
 
