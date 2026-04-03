@@ -1,5 +1,7 @@
 # Live pipeline visualization
 
+Reference expected flow and outputs: [ANSWER_KEY.md](ANSWER_KEY.md)
+
 A small [Streamlit](https://streamlit.io/) app that runs **ingestion** with a **live log** and **queries** with a **step-by-step** view of retrieval and generation.
 
 ## Setup

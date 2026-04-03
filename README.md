@@ -23,6 +23,7 @@ If you want the shortest path into the repo, use one of these lanes:
 - Learn the repo: [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md), [docs/zero_barrier/CODE_STRUCTURE_PLAN.md](docs/zero_barrier/CODE_STRUCTURE_PLAN.md), and [visualization/README.md](visualization/README.md)
 - Explore the modules: [01_Naive_RAG/README.md](01_Naive_RAG/README.md) and [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md)
 - Try the runtime: [zero_barrier_runtime/app.py](zero_barrier_runtime/app.py) and [zero_barrier_runtime/scripts/mock_trace_demo.py](zero_barrier_runtime/scripts/mock_trace_demo.py)
+- Reference answer keys: [01_Naive_RAG/ANSWER_KEY.md](01_Naive_RAG/ANSWER_KEY.md), [02_Advanced_RAG/ANSWER_KEY.md](02_Advanced_RAG/ANSWER_KEY.md), [zero_barrier_runtime/ANSWER_KEY.md](zero_barrier_runtime/ANSWER_KEY.md), [visualization/ANSWER_KEY.md](visualization/ANSWER_KEY.md)
 
 ---
 
@@ -52,6 +53,71 @@ flowchart LR
 | 01_Naive_RAG | Baseline chunk -> embed -> retrieve -> generate | [README](01_Naive_RAG/README.md), [notebook](01_Naive_RAG/notebooks/01_walkthrough.ipynb) | [ingest](01_Naive_RAG/ingest.py), [query](01_Naive_RAG/query.py), [eval](01_Naive_RAG/evaluation/eval_naive.py) |
 | 02_Advanced_RAG | Hybrid retrieval (dense + BM25), RRF, rerank | [README](02_Advanced_RAG/README.md), [notebook](02_Advanced_RAG/notebooks/02_walkthrough.ipynb) | [ingest](02_Advanced_RAG/ingest.py), [query](02_Advanced_RAG/query.py), [eval](02_Advanced_RAG/evaluation/eval_advanced.py) |
 | Visualization | Live ingest/query stepping | [README](visualization/README.md) | [app](visualization/app.py) |
+
+---
+
+## 🎛️ Visualization Features
+
+RAGgedy supports two visualization experiences depending on the path you run.
+
+### Moving preview
+
+![RAGgedy visualization preview](docs/assets/visualization-demo.gif)
+
+### Native popup visualization (no localhost)
+
+Available in runtime and module query paths via `--visualize popup` (or default `auto`).
+
+- Animated pipeline graph with numbered transitions and a moving process dot.
+- Component architecture diagram (Documents, Embeddings, Vector DB, Prompt+Context, LLM, Result).
+- Live `Current Step` explainer and `Stage Guide` descriptions.
+- Characteristics panel (top-k, retrieved count, latency, top source).
+- Built-in `Correct Sequence / Answer Key` panel.
+- Playback controls: `Pause/Resume` button and `Space` shortcut.
+- `Export PNG` button to save the side-by-side visualization view.
+
+### Real-time simulation preview
+
+The popup visualization is not static. It plays as a live simulation so users can watch the pipeline move in real time.
+
+- The green dot advances through the graph to show the current step.
+- The `Current Step` panel updates as the simulation moves.
+- The `Stage Guide` and `Correct Sequence / Answer Key` help users understand what should happen next.
+- Pause the motion with the `Pause` button or `Space`.
+
+Best commands to see it live:
+
+```bash
+python run.py --path mock --show-trace --visualize popup
+python run.py --path demo --visualize popup
+python run.py --path naive --dataset edu_scholar --question "Why does chunking help?" --visualize popup
+python run.py --path advanced --dataset edu_scholar --question "How does reranking improve quality?" --visualize popup
+```
+
+### Streamlit visualization (web UI)
+
+Available via module launchers or standalone app.
+
+- Live ingestion log streaming.
+- Query-stage tables for naive and advanced flows.
+- Module-bound launch mode with auto-configuration.
+
+### Commands
+
+```bash
+python run.py --path mock --show-trace --visualize popup
+python run.py --path naive --dataset edu_scholar --visualize popup
+python run.py --path advanced --dataset edu_scholar --visualize popup
+
+python 01_Naive_RAG/visualize.py --dataset edu_scholar
+python 02_Advanced_RAG/visualize.py --dataset edu_scholar
+```
+
+Note: PNG export in popup mode uses Pillow. Install if needed:
+
+```bash
+pip install pillow
+```
 
 ---
 
@@ -178,6 +244,10 @@ python 01_Naive_RAG/visualize.py --dataset edu_scholar --auto-ingest
 - [02_Advanced_RAG/README.md](02_Advanced_RAG/README.md)
 - [visualization/README.md](visualization/README.md)
 - [docs/zero_barrier/TUTORIAL_ELI5.md](docs/zero_barrier/TUTORIAL_ELI5.md)
+- [01_Naive_RAG/ANSWER_KEY.md](01_Naive_RAG/ANSWER_KEY.md)
+- [02_Advanced_RAG/ANSWER_KEY.md](02_Advanced_RAG/ANSWER_KEY.md)
+- [zero_barrier_runtime/ANSWER_KEY.md](zero_barrier_runtime/ANSWER_KEY.md)
+- [visualization/ANSWER_KEY.md](visualization/ANSWER_KEY.md)
 
 ---
 

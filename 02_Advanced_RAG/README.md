@@ -40,6 +40,7 @@ The visual story here is: retrieve from two angles, fuse the evidence, then rera
 | [ingest.py](ingest.py) | Hybrid ingestion pipeline |
 | [ingest_broken.py](ingest_broken.py) | Intentionally degraded hybrid variant |
 | [query.py](query.py) | Hybrid retrieval and generation flow |
+| [ANSWER_KEY.md](ANSWER_KEY.md) | Correct sequence, commands, and expected visualization |
 | [evaluation/eval_advanced.py](evaluation/eval_advanced.py) | Advanced evaluation script |
 | [notebooks/02_walkthrough.ipynb](notebooks/02_walkthrough.ipynb) | Visual walkthrough of hybrid retrieval |
 | [data/README.md](data/README.md) | Dataset layout and `RAGGEDY_DATASET` usage |

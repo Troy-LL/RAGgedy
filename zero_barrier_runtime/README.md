@@ -5,6 +5,8 @@ Runnable three-tier runtime scaffold:
 - Tier 2: API mode (Groq/Together/Hugging Face)
 - Tier 3: Local mode (Ollama)
 
+Reference expected flow and outputs: [ANSWER_KEY.md](ANSWER_KEY.md)
+
 You can also run all project paths from one command at repo root:
 
 ```bash

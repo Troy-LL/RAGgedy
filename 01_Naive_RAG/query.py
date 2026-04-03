@@ -75,11 +75,20 @@ def _ask_once(query_engine, question: str, visualize: str) -> None:
     out = run_naive_query(query_engine, question)
     elapsed_ms = (time.perf_counter() - t0) * 1000.0
     text = _format_naive_text(question, out, elapsed_ms)
+    src_names = [s["filename"] for s in out["sources"][:3]]
+    src_preview = ", ".join(src_names) if src_names else "no sources found"
     render_text(
         text,
         visualize,
         title="RAGgedy Naive Query",
         header=f"Question: {question}",
+        stages=["Question", "Embed Search", "Retrieve", "Generate", "Response"],
+        edge_descriptions=[
+            "Question intent is converted into embedding-space retrieval intent.",
+            f"Vector DB similarity search returns top chunks: {src_preview}.",
+            "Retrieved chunks are assembled into prompt context.",
+            "LLM generates grounded answer from provided context.",
+        ],
     )
 
 

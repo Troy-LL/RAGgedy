@@ -193,11 +193,20 @@ def _ask_once(
     out = run_hybrid_query(question, cfg, semantic_retriever, bm25, all_nodes, reranker)
     elapsed_ms = (time.perf_counter() - t0) * 1000.0
     text = _format_advanced_text(question, out, elapsed_ms)
+    final_names = [row["filename"] for row in out["final"][:3]]
+    final_preview = ", ".join(final_names) if final_names else "no final sources"
     render_text(
         text,
         visualize,
         title="RAGgedy Advanced Query",
         header=f"Question: {question}",
+        stages=["Question", "Dense+BM25", "RRF Fusion", "Rerank", "Response"],
+        edge_descriptions=[
+            "Question fans out to dense semantic retrieval and BM25 sparse retrieval.",
+            "Both result sets are merged with reciprocal rank fusion (RRF).",
+            f"Cross-encoder reranker prioritizes final evidence: {final_preview}.",
+            "LLM answers using reranked evidence context.",
+        ],
     )
 
 

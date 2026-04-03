@@ -33,6 +33,7 @@ The idea is to inspect one stage at a time, then compare how the output changes 
 | [ingest.py](ingest.py) | The normal ingestion pipeline |
 | [ingest_broken.py](ingest_broken.py) | Intentionally degraded ingestion variant |
 | [query.py](query.py) | Interactive question answering |
+| [ANSWER_KEY.md](ANSWER_KEY.md) | Correct sequence, commands, and expected visualization |
 | [evaluation/eval_naive.py](evaluation/eval_naive.py) | Baseline evaluation script |
 | [notebooks/01_walkthrough.ipynb](notebooks/01_walkthrough.ipynb) | Visual, step-by-step walkthrough |
 | [data/README.md](data/README.md) | Dataset layout and `RAGGEDY_DATASET` usage |
