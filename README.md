@@ -96,7 +96,7 @@ flowchart LR
 
 ## 🚀 Quick Start
 
-### 1) Setup
+### 1) One-time setup
 
 ```bash
 git clone https://github.com/Troy-LL/RAGgedy.git
@@ -123,7 +123,34 @@ pip install -r 01_Naive_RAG/requirements.txt
 pip install -r 02_Advanced_RAG/requirements.txt
 ```
 
-### 3) Run baseline module
+### 3) Choose one path
+
+#### Option A: Tier 1 Theoretical Sandbox (Mock)
+
+```bash
+python -m zero_barrier_runtime.app --mode mock --question "Why does chunking help?" --show-trace
+python -m zero_barrier_runtime.scripts.mock_trace_demo
+```
+
+#### Option B: Tier 2 Cloud Pilot (API)
+
+```bash
+set MODEL_PROVIDER=groq
+set MODEL_NAME=llama-3.1-8b-instant
+set MODEL_API_KEY=your_api_key_here
+python -m zero_barrier_runtime.app --mode api --question "Explain vector embeddings like I am 5"
+```
+
+#### Option C: Tier 3 Local Titan (On-Prem)
+
+```bash
+ollama pull llama3.1:8b
+python -m zero_barrier_runtime.app --mode local --local-model llama3.1:8b --question "How does retrieval improve answer quality?"
+```
+
+### 4) Run classic module pipelines
+
+#### Baseline module (01)
 
 ```bash
 cd 01_Naive_RAG
@@ -131,7 +158,7 @@ python ingest.py
 python query.py
 ```
 
-### 4) Run advanced module
+#### Advanced module (02)
 
 ```bash
 cd 02_Advanced_RAG
